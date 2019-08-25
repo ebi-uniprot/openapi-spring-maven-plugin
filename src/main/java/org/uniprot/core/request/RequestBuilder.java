@@ -141,8 +141,8 @@ public class RequestBuilder {
         // By default
         if (RequestMethod.GET.equals(requestMethod)) {
             if (parameter == null) { // TODO added components in param to create schema of Get Param of type object e.g. KeywordSearchDTO
-//                parameter = this.buildParam(QUERY_PARAM, null, parameters, Boolean.TRUE, pName, null);
-                parameter = this.buildParam(QUERY_PARAM, components, parameters, Boolean.TRUE, pName, null);
+                parameter = this.buildParam(QUERY_PARAM, null, parameters, Boolean.TRUE, pName, null);
+//                parameter = this.buildParam(QUERY_PARAM, components, parameters, Boolean.TRUE, pName, null);
             } else if (parameter.getName() == null) {
                 parameter.setName(pName);
             }

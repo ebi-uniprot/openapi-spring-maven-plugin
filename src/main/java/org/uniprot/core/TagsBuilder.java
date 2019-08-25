@@ -57,8 +57,9 @@ public class TagsBuilder {
             openAPI.setTags(new ArrayList<>(tagsSet));
         }
 
-        if (!CollectionUtils.isEmpty(tagsStr))
+        if (!CollectionUtils.isEmpty(tagsStr)) {
             operation.setTags(new ArrayList<>(tagsStr));
+        }
 
         return operation;
     }

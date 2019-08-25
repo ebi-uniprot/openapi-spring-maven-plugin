@@ -13,8 +13,13 @@ import static org.uniprot.utils.Constants.*;
  * Originally written by https://github.com/springdoc
  *
  * @author Modified by sahmad
+ *
+ * Default values for Info object and  Server
+ * See @link https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#infoObject
+ *
+ * https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#serverObject
+ *
  */
-
 public class GeneralInfoBuilder {
     private static final Logger LOGGER = LoggerFactory.getLogger(GeneralInfoBuilder.class);
     private String serverBaseUrl;
@@ -36,9 +41,5 @@ public class GeneralInfoBuilder {
         }
 
 
-    }
-
-    public void setServerBaseUrl(String serverBaseUrl) {
-        this.serverBaseUrl = serverBaseUrl;
     }
 }
