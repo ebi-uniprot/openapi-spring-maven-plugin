@@ -1,7 +1,7 @@
 package org.uniprot.mavenplugin;
 
 
-import org.codehaus.classworlds.ClassRealm;
+import org.codehaus.plexus.classworlds.realm.ClassRealm;
 import org.codehaus.plexus.component.configurator.AbstractComponentConfigurator;
 import org.codehaus.plexus.component.configurator.ComponentConfigurationException;
 import org.codehaus.plexus.component.configurator.ConfigurationListener;
@@ -33,14 +33,14 @@ public class IncludeProjectDependenciesComponentConfigurator extends AbstractCom
     private static final Logger LOGGER = LoggerFactory.getLogger(IncludeProjectDependenciesComponentConfigurator.class);
 
     @Override
-    public void configureComponent(Object component, PlexusConfiguration configuration,
-                                   ExpressionEvaluator expressionEvaluator, ClassRealm containerRealm,
-                                   ConfigurationListener listener)
-            throws ComponentConfigurationException {
+    public void configureComponent( final Object component, final PlexusConfiguration configuration,
+                                    final ExpressionEvaluator expressionEvaluator, final org.codehaus.plexus.classworlds.realm.ClassRealm containerRealm,
+                                    final ConfigurationListener listener )
+            throws ComponentConfigurationException{
         addProjectDependenciesToClassRealm(expressionEvaluator, containerRealm);
 
         ObjectWithFieldsConverter converter = new ObjectWithFieldsConverter();
-        converter.processConfiguration(converterLookup, component, containerRealm.getClassLoader(), configuration,
+        converter.processConfiguration(converterLookup, component, containerRealm, configuration,
                 expressionEvaluator, listener);
     }
 
@@ -56,7 +56,7 @@ public class IncludeProjectDependenciesComponentConfigurator extends AbstractCom
         // Add the project dependencies to the ClassRealm
         final URL[] urls = buildURLs(compileClasspathElements);
         for (URL url : urls) {
-            containerRealm.addConstituent(url);
+            containerRealm.addURL(url);
         }
     }
 

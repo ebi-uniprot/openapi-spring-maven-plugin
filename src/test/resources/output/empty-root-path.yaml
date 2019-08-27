@@ -1,0 +1,20 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+  - url: localhost
+    description: ' Default server url'
+paths:
+  /testingEmptyRootPathResource:
+    get:
+      summary: This is a sample summary of the api
+      operationId: emptyRootOperationId
+      responses:
+        200:
+          description: default response
+          content:
+            '*/*':
+              schema:
+                type: string
+components: {}

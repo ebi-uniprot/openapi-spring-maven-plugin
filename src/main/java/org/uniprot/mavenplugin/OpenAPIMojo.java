@@ -43,7 +43,7 @@ import java.util.*;
  */
 
 //TODO see other attributes in Mojo annotation
-@Mojo(name = "generate", defaultPhase = LifecyclePhase.COMPILE, configurator = "include-project-dependencies",
+@Mojo(name = "oas-generate", defaultPhase = LifecyclePhase.COMPILE, configurator = "include-project-dependencies",
         requiresDependencyResolution = ResolutionScope.COMPILE_PLUS_RUNTIME, threadSafe = true)
 public class OpenAPIMojo extends AbstractMojo {
 
@@ -53,7 +53,7 @@ public class OpenAPIMojo extends AbstractMojo {
     @Parameter(defaultValue = "localhost")
     private String serverBaseUrl;
 
-    @Parameter(required = true)
+    @Parameter(defaultValue = "target/generated-sources/swagger/")
     private String openApiDirectory;
 
     @Parameter(defaultValue = "openapi.yaml")

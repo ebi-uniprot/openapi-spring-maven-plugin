@@ -7,7 +7,7 @@ package org.uniprot.utils;
  */
 public final class Constants {
 
-	public static final String DEFAULT_SERVER_DESCRIPTION = "Generated server url";
+	public static final String DEFAULT_SERVER_DESCRIPTION = " Default server url";
 
 	public static final String GET_METHOD = "get";
 	public static final String POST_METHOD = "post";
