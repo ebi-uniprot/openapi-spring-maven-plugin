@@ -14,10 +14,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.util.CollectionUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.context.request.WebRequest;
@@ -118,13 +115,17 @@ public class RequestBuilder {
 
     private Parameter buildParams(String pName, Components components, java.lang.reflect.Parameter parameters,
                                   int index, Parameter parameter, Method handlerMethod, RequestMethod requestMethod) {
+
         RequestHeader requestHeader = parameterBuilder.getParameterAnnotation(handlerMethod, parameters, index,
                 RequestHeader.class);
         RequestParam requestParam = parameterBuilder.getParameterAnnotation(handlerMethod, parameters, index,
                 RequestParam.class);
         PathVariable pathVar = parameterBuilder.getParameterAnnotation(handlerMethod, parameters, index,
                 PathVariable.class);
+        CookieValue cookieValue = parameterBuilder.getParameterAnnotation(handlerMethod, parameters, index,
+                CookieValue.class);
 
+        //FIXME use switch statement
         if (requestHeader != null) {
             String name = StringUtils.isBlank(requestHeader.value()) ? pName : requestHeader.value();
             parameter = this.buildParam(HEADER_PARAM, components, parameters, requestHeader.required(), name,
@@ -137,6 +138,9 @@ public class RequestBuilder {
             String name = StringUtils.isBlank(pathVar.value()) ? pName : pathVar.value();
             // check if PATH PARAM
             parameter = this.buildParam(PATH_PARAM, components, parameters, Boolean.TRUE, name, parameter);
+        } else if(cookieValue != null){
+            String name = StringUtils.isBlank(cookieValue.value()) ? pName : cookieValue.value();
+            parameter = this.buildParam(COOKIE_PARAM, components, parameters, Boolean.TRUE, name, parameter);
         }
         // By default
         if (RequestMethod.GET.equals(requestMethod)) {

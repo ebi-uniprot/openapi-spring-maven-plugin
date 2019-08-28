@@ -215,11 +215,11 @@ public class ResponseBuilder {
     private void buildApiResponses(Components components, Method method, ApiResponses apiResponsesOp,
                                    String[] methodProduces, String httpCode, ApiResponse apiResponse) {
         // No documentation
-        if (apiResponse.getContent() == null) {
+        if (apiResponse.getContent() == null && ("default".equals(httpCode) || "200".equals(httpCode))) {//FIXME hack
             Content content = buildContent(components, method, methodProduces);
             apiResponse.setContent(content);
         }
-        if (StringUtils.isBlank(apiResponse.getDescription())) {
+        if (StringUtils.isBlank(apiResponse.getDescription()) && ("default".equals(httpCode) || "200".equals(httpCode))) { //FIXME hack
             apiResponse.setDescription(DEFAULT_DESCRIPTION);
         }
         apiResponsesOp.addApiResponse(httpCode, apiResponse);

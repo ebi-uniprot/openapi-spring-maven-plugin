@@ -26,7 +26,7 @@ public class EchoResourceTest extends AbstractMojoTestCase {
     }
 
     @Test
-    public void testGenerateEmptyRootPath() throws Exception {
+    public void testGenerateOpenAPI() throws Exception {
         File testPom = getTestFile("src/test/resources/poms/echo-resource-pom.xml");
         Assert.assertNotNull(testPom);
         Assert.assertTrue(testPom.exists());
@@ -34,7 +34,7 @@ public class EchoResourceTest extends AbstractMojoTestCase {
         openAPIMojo.execute();
         // compare the yaml file contents
         // expected yaml file
-        File expectedYamlFile = new File("src/test/resources/output/echo-resource.yaml");
+        File expectedYamlFile = new File("src/test/resources/expected-output/echo-resource.yaml");
         String expectedYamlContent = FileUtils.readFileToString(expectedYamlFile, "UTF-8");
         JsonNode expectedJson = mapper.readTree(TestUtils.yamlToJson(expectedYamlContent));
 

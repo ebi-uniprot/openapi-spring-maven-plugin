@@ -238,7 +238,7 @@ public class OperationBuilder {
         if (StringUtils.isNotBlank(response.description())) {
             apiResponseObject.setDescription(response.description());
         } else {
-            apiResponseObject.setDescription(DEFAULT_DESCRIPTION);
+//            apiResponseObject.setDescription(DEFAULT_DESCRIPTION);
         }
     }
 

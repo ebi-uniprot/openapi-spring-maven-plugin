@@ -14,7 +14,7 @@ import org.uniprot.mavenplugin.utils.TestUtils;
 
 import java.io.File;
 
-public class EmptyRootPathResourceTest extends AbstractMojoTestCase {
+public class ExamplesResourceTest extends AbstractMojoTestCase {
     private ObjectMapper mapper = Json.mapper();
 
     protected void setUp() throws Exception {
@@ -26,20 +26,20 @@ public class EmptyRootPathResourceTest extends AbstractMojoTestCase {
     }
 
     @Test
-    public void testGenerateEmptyRootPath() throws Exception {
-        File testPom = getTestFile("src/test/resources/poms/empty-root-path-pom.xml");
+    public void testGenerateOpenAPI() throws Exception {
+        File testPom = getTestFile("src/test/resources/poms/examples-resource-pom.xml");
         Assert.assertNotNull(testPom);
         Assert.assertTrue(testPom.exists());
         OpenAPIMojo openAPIMojo = (OpenAPIMojo) lookupMojo("oas-generate", testPom);
         openAPIMojo.execute();
         // compare the yaml file contents
         // expected yaml file
-        File expectedYamlFile = new File("src/test/resources/expected-output/empty-root-path.yaml");
+        File expectedYamlFile = new File("src/test/resources/expected-output/examples-resource.yaml");
         String expectedYamlContent = FileUtils.readFileToString(expectedYamlFile, "UTF-8");
         JsonNode expectedJson = mapper.readTree(TestUtils.yamlToJson(expectedYamlContent));
 
         // generated file
-        File generatedYamlFile = new File("target/generated-sources/swagger/empty-root-path.yaml");
+        File generatedYamlFile = new File("target/generated-sources/swagger/examples-resource.yaml");
         Assert.assertNotNull(generatedYamlFile);
         Assert.assertTrue(generatedYamlFile.exists());
         String generatedYamlContent = FileUtils.readFileToString(generatedYamlFile, "UTF-8");

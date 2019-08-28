@@ -14,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.uniprot.core.MediaAttributes;
 
@@ -131,7 +132,9 @@ public class RequestBodyBuilder {
         } else {
             content1.addMediaType(MediaType.ALL_VALUE, mediaType);
         }
-        requestBody.setContent(content1);
+        if(requestBody.getContent() == null) {
+            requestBody.setContent(content1);
+        }
         if (parameterDoc != null) {
             if (StringUtils.isNotBlank(parameterDoc.description()))
                 requestBody.setDescription(parameterDoc.description());

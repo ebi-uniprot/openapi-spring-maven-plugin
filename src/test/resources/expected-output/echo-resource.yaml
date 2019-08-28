@@ -1,0 +1,228 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+- url: localhost
+  description: ' Default server url'
+paths:
+  /echo/requestParamExpectParamValue:
+    get:
+      tags:
+      - Set of simple endpoints that return whatever value you pass in
+      operationId: requestParamExpectParamValue
+      parameters:
+      - name: requestParamValue
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: default response
+          content:
+            application/json:
+              schema:
+                type: string
+  /echo/pathVariableExpectVariableValue/{pathVariableValue}:
+    get:
+      tags:
+      - Set of simple endpoints that return whatever value you pass in
+      operationId: pathVariableExpectVariableValue
+      parameters:
+      - name: pathVariableValue
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: default response
+          content:
+            application/json:
+              schema:
+                type: string
+  /echo/requestHeaderExpectHeaderName:
+    get:
+      tags:
+      - Set of simple endpoints that return whatever value you pass in
+      operationId: requestHeaderExpectHeaderName
+      parameters:
+      - name: requestHeaderName
+        in: header
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: default response
+          content:
+            application/json:
+              schema:
+                type: string
+  /echo/pathVariableExpectVariableName/{pathVariableName}:
+    get:
+      tags:
+      - Set of simple endpoints that return whatever value you pass in
+      operationId: pathVariableExpectVariableName
+      parameters:
+      - name: pathVariableName
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: default response
+          content:
+            application/json:
+              schema:
+                type: string
+  /echo/requestParamExpectParamName:
+    get:
+      tags:
+      - Set of simple endpoints that return whatever value you pass in
+      operationId: requestParamExpectParamName
+      parameters:
+      - name: requestParamName
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: default response
+          content:
+            application/json:
+              schema:
+                type: string
+  /echo/cookieValueExpectCookieValue:
+    get:
+      tags:
+      - Set of simple endpoints that return whatever value you pass in
+      operationId: cookieValueExpectCookieValue
+      parameters:
+      - name: cookieValueValue
+        in: cookie
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: default response
+          content:
+            application/json:
+              schema:
+                type: string
+  /echo/cookieValueExpectParameterName:
+    get:
+      tags:
+      - Set of simple endpoints that return whatever value you pass in
+      operationId: cookieValueExpectParameterName
+      parameters:
+      - name: parameterName
+        in: cookie
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: default response
+          content:
+            application/json:
+              schema:
+                type: string
+  /echo/requestHeaderExpectParameterName:
+    get:
+      tags:
+      - Set of simple endpoints that return whatever value you pass in
+      operationId: requestHeaderExpectParameterName
+      parameters:
+      - name: parameterName
+        in: header
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: default response
+          content:
+            application/json:
+              schema:
+                type: string
+  /echo/requestParamExpectParameterName:
+    get:
+      tags:
+      - Set of simple endpoints that return whatever value you pass in
+      operationId: requestParamExpectParameterName
+      parameters:
+      - name: parameterName
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: default response
+          content:
+            application/json:
+              schema:
+                type: string
+  /echo/pathVariableExpectParameterName/{parameterName}:
+    get:
+      tags:
+      - Set of simple endpoints that return whatever value you pass in
+      operationId: pathVariableExpectParameterName
+      parameters:
+      - name: parameterName
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: default response
+          content:
+            application/json:
+              schema:
+                type: string
+            application/xml:
+              schema:
+                type: string
+  /echo/requestHeaderExpectHeaderValue:
+    get:
+      tags:
+      - Set of simple endpoints that return whatever value you pass in
+      operationId: requestHeaderExpectHeaderValue
+      parameters:
+      - name: requestHeaderValue
+        in: header
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: default response
+          content:
+            application/json:
+              schema:
+                type: string
+  /echo/cookieValueExpectCookieName:
+    get:
+      tags:
+      - Set of simple endpoints that return whatever value you pass in
+      operationId: cookieValueExpectCookieName
+      parameters:
+      - name: cookieValueName
+        in: cookie
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: default response
+          content:
+            application/json:
+              schema:
+                type: string
+components: {}

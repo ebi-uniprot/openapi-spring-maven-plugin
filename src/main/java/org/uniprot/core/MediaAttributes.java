@@ -59,6 +59,8 @@ public class MediaAttributes {
                 if (reqPostMappringMethod != null) {
                     methodProduces = reqPostMappringMethod.produces();
                     methodConsumes = reqPostMappringMethod.consumes();
+                } else {
+                    populateDefault(method);
                 }
                 break;
             case GET:
@@ -66,6 +68,8 @@ public class MediaAttributes {
                 if (reqGetMappringMethod != null) {
                     methodProduces = reqGetMappringMethod.produces();
                     methodConsumes = reqGetMappringMethod.consumes();
+                } else {
+                    populateDefault(method);
                 }
                 break;
             case DELETE:
@@ -73,6 +77,8 @@ public class MediaAttributes {
                 if (reqDeleteMappringMethod != null) {
                     methodProduces = reqDeleteMappringMethod.produces();
                     methodConsumes = reqDeleteMappringMethod.consumes();
+                } else {
+                    populateDefault(method);
                 }
                 break;
             case PUT:
@@ -80,24 +86,30 @@ public class MediaAttributes {
                 if (reqPutMappringMethod != null) {
                     methodProduces = reqPutMappringMethod.produces();
                     methodConsumes = reqPutMappringMethod.consumes();
+                } else {
+                    populateDefault(method);
                 }
                 break;
             default:
-                RequestMapping reqMappringMethod = ReflectionUtils.getAnnotation(method, RequestMapping.class);
-                if (reqMappringMethod != null) {
-                    methodProduces = reqMappringMethod.produces();
-                    methodConsumes = reqMappringMethod.consumes();
-                }
+                populateDefault(method);
                 break;
         }
     }
 
+    private void populateDefault(Method method) {
+        RequestMapping reqMappingMethod = ReflectionUtils.getAnnotation(method, RequestMapping.class);
+        if (reqMappingMethod != null) {
+            methodProduces = reqMappingMethod.produces();
+            methodConsumes = reqMappingMethod.consumes();
+        }
+    }
+
     public String[] getAllConsumes() {
-        return ArrayUtils.addAll(methodConsumes, classConsumes);
+        return ArrayUtils.isNotEmpty(methodConsumes) ? methodConsumes : classConsumes;
     }
 
     public String[] getAllProduces() {
-        return ArrayUtils.addAll(methodProduces, classProduces);
+        return ArrayUtils.isNotEmpty(methodProduces)? methodProduces : classProduces;
     }
 
 }
