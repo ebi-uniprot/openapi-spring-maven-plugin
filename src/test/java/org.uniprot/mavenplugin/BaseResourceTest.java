@@ -31,7 +31,7 @@ public abstract class BaseResourceTest extends AbstractMojoTestCase {
         Assert.assertNotNull(testPom);
         Assert.assertTrue(testPom.exists());
         OpenAPIMojo openAPIMojo = (OpenAPIMojo) lookupMojo("oas-generate", testPom);
-        openAPIMojo.execute();
+        openAPIMojo.execute();// generate yaml file
         // compare the yaml file contents
         // expected yaml file
         File expectedYamlFile = new File(expectedFilePath);

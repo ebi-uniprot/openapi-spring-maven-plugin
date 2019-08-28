@@ -6,10 +6,15 @@ servers:
 - url: localhost
   description: ' Default server url'
 paths:
-  /sameOperationName:
+  /notannotatedoperationduplicated:
     get:
-      description: Same Operation Name
       operationId: getUser
+      parameters:
+      - name: id
+        in: query
+        required: true
+        schema:
+          type: string
       responses:
         200:
           description: default response
@@ -17,14 +22,9 @@ paths:
             '*/*':
               schema:
                 type: string
-    delete:
-      description: Same Operation Name Duplicated
+  /notannotatedoperation:
+    get:
       operationId: getUser_1
-      requestBody:
-        content:
-          '*/*':
-            schema:
-              type: string
       responses:
         200:
           description: default response

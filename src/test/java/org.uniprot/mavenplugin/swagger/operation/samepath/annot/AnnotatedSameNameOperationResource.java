@@ -1,4 +1,4 @@
-package org.uniprot.mavenplugin.swagger.operation.samepath;
+package org.uniprot.mavenplugin.swagger.operation.samepath.annot;
 
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.stereotype.Controller;

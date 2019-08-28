@@ -123,6 +123,10 @@ public class OpenAPIMojo extends AbstractMojo {
         this.packageToScan = packageToScan;
     }
 
+    public void setOpenApiFileName(String openApiFileName){
+        this.openApiFileName = openApiFileName;
+    }
+
     // init the builders
     private void initialise() {
         parameterBuilder = new ParameterBuilder();
