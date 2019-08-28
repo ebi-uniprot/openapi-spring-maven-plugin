@@ -4,10 +4,20 @@ import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.PathItem;
 import io.swagger.v3.oas.models.Paths;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.uniprot.core.operation.OperationBuilder;
 
 public class PathItemBuilder {
 
+    protected  OperationBuilder operationBuilder;
+    public PathItemBuilder(OperationBuilder operationBuilder){
+        this.operationBuilder = operationBuilder;
+    }
+
     public PathItem buildPathItem(RequestMethod requestMethod, Operation operation, String operationPath, Paths paths) {
+        // set the operationId
+        String operationId = this.operationBuilder.getOperationId(operation.getOperationId(), paths);
+        operation.setOperationId(operationId);
+
         PathItem pathItemObject;
         if (paths.containsKey(operationPath)) {
             pathItemObject = paths.get(operationPath);

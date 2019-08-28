@@ -5,10 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import io.swagger.v3.core.util.AnnotationsUtils;
 import io.swagger.v3.core.util.ReflectionUtils;
-import io.swagger.v3.oas.models.Components;
-import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.Operation;
-import io.swagger.v3.oas.models.PathItem;
+import io.swagger.v3.oas.models.*;
 import io.swagger.v3.oas.models.headers.Header;
 import io.swagger.v3.oas.models.links.Link;
 import io.swagger.v3.oas.models.media.Schema;
@@ -60,7 +57,7 @@ public class OperationBuilder {
             operation.setDescription(apiOperation.description());
         }
         if (StringUtils.isNotBlank(apiOperation.operationId())) {
-            operation.setOperationId(getOperationId(apiOperation.operationId(), openAPI));
+            operation.setOperationId(getOperationId(apiOperation.operationId(), openAPI.getPaths()));
         }
         if (apiOperation.deprecated()) {
             operation.setDeprecated(apiOperation.deprecated());
@@ -131,13 +128,13 @@ public class OperationBuilder {
         }
     }
 
-    private String getOperationId(String operationId, OpenAPI openAPI) {
-        boolean operationIdUsed = existOperationId(operationId, openAPI);
+    public String getOperationId(String operationId, Paths paths) {
+        boolean operationIdUsed = existOperationId(operationId, paths);
         String operationIdToFind = null;
         int counter = 0;
         while (operationIdUsed) {
             operationIdToFind = String.format("%s_%d", operationId, ++counter);
-            operationIdUsed = existOperationId(operationIdToFind, openAPI);
+            operationIdUsed = existOperationId(operationIdToFind, paths);
         }
         if (operationIdToFind != null) {
             operationId = operationIdToFind;
@@ -145,14 +142,11 @@ public class OperationBuilder {
         return operationId;
     }
 
-    private boolean existOperationId(String operationId, OpenAPI openAPI) {
-        if (openAPI == null) {
+    private boolean existOperationId(String operationId, Paths paths) {
+        if (paths == null || paths.isEmpty()) {
             return false;
         }
-        if (openAPI.getPaths() == null || openAPI.getPaths().isEmpty()) {
-            return false;
-        }
-        for (PathItem path : openAPI.getPaths().values()) {
+        for (PathItem path : paths.values()) {
             Set<String> pathOperationIds = extractOperationIdFromPathItem(path);
             if (pathOperationIds.contains(operationId)) {
                 return true;

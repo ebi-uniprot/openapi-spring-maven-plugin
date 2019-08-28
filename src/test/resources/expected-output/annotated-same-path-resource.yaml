@@ -1,0 +1,35 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+- url: localhost
+  description: ' Default server url'
+paths:
+  /sameOperationName:
+    get:
+      description: Same Operation Name
+      operationId: getUser_1
+      responses:
+        200:
+          description: default response
+          content:
+            '*/*':
+              schema:
+                type: string
+    delete:
+      description: Same Operation Name Duplicated
+      operationId: getUser
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              type: string
+      responses:
+        200:
+          description: default response
+          content:
+            '*/*':
+              schema:
+                type: string
+components: {}

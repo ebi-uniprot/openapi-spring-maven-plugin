@@ -17,6 +17,7 @@ import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -95,11 +96,13 @@ public class OpenAPIMojo extends AbstractMojo {
         Reflections reflections = new Reflections(this.packageToScan);
         // TODO think about other types of annotation on the controller classes.
         Set<Class<?>> restControllers = reflections.getTypesAnnotatedWith(RestController.class);
+        Set<Class<?>> controllers = reflections.getTypesAnnotatedWith(Controller.class);
         // LOGGER.info("No. of controllers found {}", restControllers.size());
         Set<Class<?>> requestMappingClasses = reflections.getTypesAnnotatedWith(RequestMapping.class);
         Set<Class<?>> allRequiredClasses = new HashSet<>();
         allRequiredClasses.addAll(restControllers);
         allRequiredClasses.addAll(requestMappingClasses);
+        allRequiredClasses.addAll(controllers);
 
         // calculate generic responses TODO write a test case for controller adbvice
         Set<Class<?>> controllerAdvices = reflections.getTypesAnnotatedWith(ControllerAdvice.class);
@@ -131,7 +134,7 @@ public class OpenAPIMojo extends AbstractMojo {
         operationBuilder = new OperationBuilder(parameterBuilder, requestBodyBuilder, securityParser);
         responseBuilder = new ResponseBuilder();
         requestBuilder = new RequestBuilder(parameterBuilder, requestBodyBuilder);
-        pathItemBuilder = new PathItemBuilder();
+        pathItemBuilder = new PathItemBuilder(operationBuilder);
     }
 
     private Map<String, SpringControllerMethod> generateResourceMap(Set<Class<?>> validClasses) {
