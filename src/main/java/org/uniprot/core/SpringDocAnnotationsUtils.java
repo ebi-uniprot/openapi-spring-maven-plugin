@@ -6,21 +6,26 @@ import io.swagger.v3.core.converter.ModelConverters;
 import io.swagger.v3.core.converter.ResolvedSchema;
 import io.swagger.v3.core.util.AnnotationsUtils;
 import io.swagger.v3.core.util.PrimitiveType;
+import io.swagger.v3.oas.annotations.extensions.Extension;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.ExternalDocumentation;
 import io.swagger.v3.oas.models.media.Content;
 import io.swagger.v3.oas.models.media.MediaType;
 import io.swagger.v3.oas.models.media.Schema;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.CollectionUtils;
 
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 /**
  * Originally written by https://github.com/springdoc
- *
  */
 public class SpringDocAnnotationsUtils extends AnnotationsUtils {
     private static final Logger LOGGER = LoggerFactory.getLogger(SpringDocAnnotationsUtils.class);
@@ -32,15 +37,17 @@ public class SpringDocAnnotationsUtils extends AnnotationsUtils {
     static final String COMPONENTS_REF = "#/components/schemas/";
 
     public static Schema resolveSchemaFromType(Class<?> schemaImplementation, Components components,
-                                               JsonView jsonViewAnnotation) {
+                                               JsonView jsonViewAnnotation, io.swagger.v3.oas.annotations.media.Schema schemaAnnotation) {
         Schema schemaObject;
         PrimitiveType primitiveType = PrimitiveType.fromType(schemaImplementation);
         if (primitiveType != null) {
             schemaObject = primitiveType.createProperty();
+            updateSchemaFromSchemaAnnotation(schemaObject, schemaAnnotation);
         } else {
+            ModelConverters mr = ModelConverters.getInstance();
             schemaObject = new Schema();
-            ResolvedSchema resolvedSchema = ModelConverters.getInstance().readAllAsResolvedSchema(
-                    new AnnotatedType().type(schemaImplementation).jsonViewAnnotation(jsonViewAnnotation));
+            AnnotatedType annotatedType = new AnnotatedType().type(schemaImplementation).jsonViewAnnotation(jsonViewAnnotation);
+            ResolvedSchema resolvedSchema = mr.readAllAsResolvedSchema(annotatedType);
             Map<String, Schema> schemaMap;
             if (resolvedSchema != null) {
                 schemaMap = resolvedSchema.referencedSchemas;
@@ -133,4 +140,125 @@ public class SpringDocAnnotationsUtils extends AnnotationsUtils {
         return mediaType;
     }
 
+    private static void updateSchemaFromSchemaAnnotation(Schema schema, io.swagger.v3.oas.annotations.media.Schema schemaAnnotation) {
+        if (schema != null && schemaAnnotation != null) {
+
+            if (StringUtils.isBlank(schema.getName()) && StringUtils.isNotBlank(schemaAnnotation.name())) {
+                schema.name(schemaAnnotation.name());
+            }
+
+            if (StringUtils.isBlank(schema.getDescription()) && StringUtils.isNotBlank(schemaAnnotation.description())) {
+                schema.description(schemaAnnotation.description());
+            }
+            String title = schema.getTitle();
+            if (StringUtils.isBlank(title) && StringUtils.isNotBlank(schemaAnnotation.title())) {
+                schema.title(schemaAnnotation.title());
+            }
+            String format = schema.getFormat();
+            if (StringUtils.isBlank(format) && StringUtils.isNotBlank(schemaAnnotation.format())) {
+                schema.format(schemaAnnotation.format());
+            }
+
+            Object example = schema.getExample();
+            if (example == null && StringUtils.isNotBlank(schemaAnnotation.example())) {
+                schema.example(schemaAnnotation.example());
+            }
+            Boolean readOnly = schema.getReadOnly();
+            Boolean schemaAnnotReadOnly = getReadOnly(schemaAnnotation);
+            if (readOnly == null && schemaAnnotReadOnly != null) {
+                schema.readOnly(schemaAnnotReadOnly);
+            }
+            Boolean nullable = schema.getNullable();
+            if (nullable == null && schemaAnnotation.nullable()) {
+                schema.nullable(schemaAnnotation.nullable());
+            }
+            BigDecimal multipleOf = schema.getMultipleOf();
+            if (multipleOf == null && schemaAnnotation.multipleOf() != 0) {
+                schema.multipleOf(BigDecimal.valueOf(schemaAnnotation.multipleOf()));
+            }
+            Integer maxLength = schema.getMaxLength();
+            if (maxLength == null && schemaAnnotation.maxLength() != Integer.MAX_VALUE) {
+                schema.maxLength(schemaAnnotation.maxLength());
+            }
+            Integer minLength = schema.getMinLength();
+            if (minLength == null && schemaAnnotation.minLength() != 0) {
+                schema.minLength(schemaAnnotation.minLength());
+            }
+            BigDecimal minimum = schema.getMinimum();
+            if (minimum == null && StringUtils.isNotBlank(schemaAnnotation.minimum())) {
+                schema.minimum(new BigDecimal(schemaAnnotation.minimum()));
+            }
+            BigDecimal maximum = schema.getMaximum();
+            if (maximum == null && StringUtils.isNotBlank(schemaAnnotation.maximum())) {
+                schema.maximum(new BigDecimal(schemaAnnotation.maximum()));
+            }
+            Boolean exclusiveMinimum = schema.getExclusiveMinimum();
+            if (exclusiveMinimum == null && schemaAnnotation.exclusiveMinimum()) {
+                schema.exclusiveMinimum(schemaAnnotation.exclusiveMinimum());
+            }
+            Boolean exclusiveMaximum = schema.getExclusiveMaximum();
+            if (exclusiveMaximum == null && schemaAnnotation.exclusiveMaximum()) {
+                schema.exclusiveMaximum(schemaAnnotation.exclusiveMaximum());
+            }
+            String pattern = schema.getPattern();
+            if (StringUtils.isBlank(pattern) && StringUtils.isNotBlank(schemaAnnotation.pattern())) {
+                schema.pattern(schemaAnnotation.pattern());
+            }
+            Integer minProperties = schema.getMinProperties();
+            if (minProperties == null && schemaAnnotation.minProperties() != 0) {
+                schema.minProperties(schemaAnnotation.minProperties());
+            }
+            Integer maxProperties = schema.getMaxProperties();
+            if (maxProperties == null && schemaAnnotation.maxProperties() != 0) {
+                schema.maxProperties(schemaAnnotation.maxProperties());
+            }
+            List<String> requiredProperties = schema.getRequired();
+            if (CollectionUtils.isEmpty(requiredProperties) && schemaAnnotation.requiredProperties().length > 0) {
+                schema.setRequired(Arrays.asList(schemaAnnotation.requiredProperties()));
+            }
+            Boolean writeOnly = schema.getWriteOnly();
+            if (writeOnly == null && schemaAnnotation.writeOnly()) {
+                schema.writeOnly(schemaAnnotation.writeOnly());
+            }
+            ExternalDocumentation externalDocs = schema.getExternalDocs();
+            if (externalDocs == null) {
+                io.swagger.v3.oas.annotations.ExternalDocumentation externalDocAnnot = schemaAnnotation.externalDocs();
+                if (externalDocAnnot != null &&
+                        (StringUtils.isNotBlank(externalDocAnnot.description()) || StringUtils.isNotBlank(externalDocAnnot.url()))) {
+                    externalDocs = new ExternalDocumentation();
+                    externalDocs.description(externalDocAnnot.description());
+                    externalDocs.url(externalDocAnnot.url());
+                    schema.externalDocs(externalDocs);
+                }
+            }
+            Boolean deprecated = schema.getDeprecated();
+            if (deprecated == null && schemaAnnotation.deprecated()) {
+                schema.deprecated(schemaAnnotation.deprecated());
+            }
+            List<String> allowableValues = schema.getEnum();
+            if (CollectionUtils.isEmpty(allowableValues) && schemaAnnotation.allowableValues().length > 0) {
+                schema.setEnum(Arrays.asList(schemaAnnotation.allowableValues()));
+            }
+
+            Map<String, Object> extensions = schema.getExtensions();
+            if (CollectionUtils.isEmpty(extensions)) {
+                if (schemaAnnotation.extensions() != null && (schemaAnnotation.extensions().length > 0)){
+                    schema.setExtensions(AnnotationsUtils.getExtensions(schemaAnnotation.extensions()));
+                }
+            }
+        }
+    }
+
+    private static Boolean getReadOnly(io.swagger.v3.oas.annotations.media.Schema schema) {
+        if (schema != null && schema.accessMode().equals(io.swagger.v3.oas.annotations.media.Schema.AccessMode.READ_ONLY)) {
+            return true;
+        } else if (schema != null && schema.accessMode().equals(io.swagger.v3.oas.annotations.media.Schema.AccessMode.WRITE_ONLY)) {
+            return null;
+        } else if (schema != null && schema.accessMode().equals(io.swagger.v3.oas.annotations.media.Schema.AccessMode.READ_WRITE)) {
+            return null;
+        } else if (schema != null && schema.readOnly()) {
+            return schema.readOnly();
+        }
+        return null;
+    }
 }

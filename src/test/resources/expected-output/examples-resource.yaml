@@ -3,8 +3,8 @@ info:
   title: OpenAPI definition
   version: v0
 servers:
-- url: localhost
-  description: ' Default server url'
+  - url: localhost
+    description: ' Default server url'
 paths:
   /example:
     post:
@@ -17,8 +17,8 @@ paths:
           style: simple
           schema:
             type: string
-#            description: Schema FIXME
-#            example: Subscription example
+            description: Schema
+            example: Subscription example
           examples:
             subscriptionId_2:
               summary: Subscription number 54321

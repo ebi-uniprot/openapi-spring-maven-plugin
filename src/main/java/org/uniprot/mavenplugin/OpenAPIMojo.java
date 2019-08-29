@@ -186,6 +186,7 @@ public class OpenAPIMojo extends AbstractMojo {
 
         Operation operation = new Operation();
 
+
         // specification extension for query param (search query) rules and examples
         // set operation specification extension
         operationBuilder.setCustomOperationExt(operation, handlerMethod);
@@ -195,6 +196,8 @@ public class OpenAPIMojo extends AbstractMojo {
         operation = tagsBuilder.build(handlerMethod, operation, openAPI);
 
         Components components = openAPIBuilder.getComponents();
+        // add repeatable param see test case in RepeatableParamertersResource
+        operationBuilder.setRepeatableParameters(handlerMethod, operation, components);
         // Add documentation from operation annotation
         if (apiOperation != null) {
             operationBuilder.parse(components, apiOperation, operation, openAPI, mediaAttributes);
@@ -213,7 +216,4 @@ public class OpenAPIMojo extends AbstractMojo {
         PathItem pathItemObject = this.pathItemBuilder.buildPathItem(requestMethod, operation, operationPath, paths);
         paths.addPathItem(operationPath, pathItemObject);
     }
-
-
-
 }

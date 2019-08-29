@@ -8,6 +8,6 @@ public class AnnotatedSameNameOperationResourceTest extends BaseResourceTest {
         String pomFilePath = "src/test/resources/poms/annotated-same-path-resource-pom.xml";
         String expectedFilePath = "src/test/resources/expected-output/annotated-same-path-resource.yaml";
         String generatedFilePath = "target/generated-sources/swagger/annotated-same-path-resource.yaml";
-        generateAndTestOASYaml(pomFilePath, expectedFilePath, generatedFilePath);
+        generateAndTestOAS3Yaml(pomFilePath, expectedFilePath, generatedFilePath);
     }
 }

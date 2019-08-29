@@ -71,7 +71,10 @@ public class RequestBuilder {
         // requests
         LocalVariableTableParameterNameDiscoverer d = new LocalVariableTableParameterNameDiscoverer();
         String[] pNames = d.getParameterNames(handlerMethod);
-        List<Parameter> operationParameters = new ArrayList<>();
+
+        List<Parameter> operationParameters = CollectionUtils.isEmpty(operation.getParameters()) ?
+                new ArrayList<>() : operation.getParameters();
+
         java.lang.reflect.Parameter[] parameters = handlerMethod.getParameters();
 
         for (int i = 0; i < pNames.length; i++) {
@@ -106,7 +109,8 @@ public class RequestBuilder {
                 }
             }
         }
-        if (!CollectionUtils.isEmpty(operationParameters)) {
+
+        if(!CollectionUtils.isEmpty(operationParameters)){
             operation.setParameters(operationParameters);
         }
 

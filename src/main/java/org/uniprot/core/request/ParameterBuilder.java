@@ -38,6 +38,7 @@ import java.util.Set;
 
 /**
  * Originally written by https://github.com/springdoc
+ *
  * @author Modified by sahmad to make it non-spring project
  */
 
@@ -84,15 +85,35 @@ public class ParameterBuilder {
         setParameterStyle(parameter, parameterDoc);
         setParameterExplode(parameter, parameterDoc);
 
+//        Schema schemaFromAnnot = null;
+//        if (AnnotationsUtils.hasSchemaAnnotation(parameterDoc.schema())) {
+//            Optional<Schema> optSchema = AnnotationsUtils.getSchemaFromAnnotation(parameterDoc.schema(), components, null);
+//            if (optSchema.isPresent()) {
+//                schemaFromAnnot = optSchema.get();
+//            }
+//        }
+
         Type type = ParameterProcessor.getParameterType(parameterDoc);
-        Schema schema = null;
-        schema = this.calculateSchema(components, type, parameter.getName());
+        Schema schema = this.calculateSchema(components, type, parameter.getName(), parameterDoc.schema());
         parameter.setSchema(schema);
+
+//        Schema computedSchema = this.calculateSchema(components, type, parameter.getName());
+//        if(schemaFromAnnot != null){
+//            if(StringUtils.isEmpty(schemaFromAnnot.getType())){
+//                // set type from computed one
+//                schemaFromAnnot.setType(computedSchema.getType());
+//            }
+//            parameter.setSchema(schemaFromAnnot);
+//        } else {
+//            parameter.setSchema(computedSchema);
+//        }
+
+
 
         return parameter;
     }
 
-    public Schema calculateSchema(Components components, Type type, String paramName) {
+    public Schema calculateSchema(Components components, Type type, String paramName, io.swagger.v3.oas.annotations.media.Schema schemaAnnotation) {
         Schema schemaN = null;
         JavaType ct = constructType(type);
 
@@ -125,7 +146,7 @@ public class ParameterBuilder {
         } else {
             try {
                 schemaN = SpringDocAnnotationsUtils.resolveSchemaFromType(Class.forName(type.getTypeName()),
-                        null, null);
+                        null, null, schemaAnnotation);
             } catch (ClassNotFoundException e) {
                 LOGGER.error("Class Not Found in classpath : {}", e.getMessage());
             }
@@ -173,7 +194,7 @@ public class ParameterBuilder {
                 }
             }
         } else { // TODO Note introduced the components
-            schemaN = SpringDocAnnotationsUtils.resolveSchemaFromType(parameter.getType(), null, null);
+            schemaN = SpringDocAnnotationsUtils.resolveSchemaFromType(parameter.getType(), null, null, null);
 //            schemaN = SpringDocAnnotationsUtils.resolveSchemaFromType(parameter.getType(), components, null);
         }
         return schemaN;

@@ -319,4 +319,16 @@ public class OperationBuilder {
 
         return extensions;
     }
+
+    public void setRepeatableParameters(Method handlerMethod, Operation operation, Components components) {
+        // get the repeatable paramters outside operation tag
+        List<io.swagger.v3.oas.annotations.Parameter> parameters = ReflectionUtils.getRepeatableAnnotations(handlerMethod,
+                io.swagger.v3.oas.annotations.Parameter.class);
+
+        // build parameters
+        for (io.swagger.v3.oas.annotations.Parameter parameterDoc : parameters) {
+            Parameter parameter = parameterBuilder.buildParameterFromDoc(parameterDoc, components);
+            operation.addParametersItem(parameter);
+        }
+    }
 }
