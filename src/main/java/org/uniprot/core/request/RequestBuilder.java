@@ -135,7 +135,6 @@ public class RequestBuilder {
             parameter = this.buildParam(HEADER_PARAM, components, parameters, requestHeader.required(), name,
                     parameter);
         } else if (requestParam != null) {
-            // LOGGER.info("PNAME IS ================> {}", pName);
             String name = StringUtils.isBlank(requestParam.value()) ? pName : requestParam.value();
             parameter = this.buildParam(QUERY_PARAM, components, parameters, requestParam.required(), name, parameter);
         } else if (pathVar != null) {
@@ -148,9 +147,8 @@ public class RequestBuilder {
         }
         // By default
         if (RequestMethod.GET.equals(requestMethod)) {
-            if (parameter == null) { // TODO added components in param to create schema of Get Param of type object e.g. KeywordSearchDTO
+            if (parameter == null) {
                 parameter = this.buildParam(QUERY_PARAM, null, parameters, Boolean.TRUE, pName, null);
-//                parameter = this.buildParam(QUERY_PARAM, components, parameters, Boolean.TRUE, pName, null);
             } else if (parameter.getName() == null) {
                 parameter.setName(pName);
             }

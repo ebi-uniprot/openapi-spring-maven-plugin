@@ -32,6 +32,7 @@ import static org.uniprot.utils.Constants.DEFAULT_DESCRIPTION;
 
 /**
  * Originally written by https://github.com/springdoc
+ *
  * @author Modified by sahmad
  */
 
@@ -75,10 +76,7 @@ public class OperationBuilder {
                 .ifPresent(servers -> servers.forEach(operation::addServersItem));
 
         // build parameters
-        for (io.swagger.v3.oas.annotations.Parameter parameterDoc : apiOperation.parameters()) {
-            Parameter parameter = parameterBuilder.buildParameterFromDoc(parameterDoc, components);
-            operation.addParametersItem(parameter);
-        }
+        buildParameters(Arrays.asList(apiOperation.parameters()), operation, components);
 
         // RequestBody in Operation
         requestBodyBuilder.buildRequestBodyFromDoc(apiOperation.requestBody(), mediaAttributes.getClassConsumes(),
@@ -100,6 +98,7 @@ public class OperationBuilder {
         buildExtensions(apiOperation, operation);
         return openAPI;
     }
+
 
     public void setCustomOperationExt(Operation operation, Method handlerMethod) {
         Map<String, Object> extensions = getOperationExtensions(handlerMethod);
@@ -232,7 +231,7 @@ public class OperationBuilder {
         if (StringUtils.isNotBlank(response.description())) {
             apiResponseObject.setDescription(response.description());
         } else {
-//            apiResponseObject.setDescription(DEFAULT_DESCRIPTION);
+            apiResponseObject.setDescription(DEFAULT_DESCRIPTION);
         }
     }
 
@@ -320,12 +319,14 @@ public class OperationBuilder {
         return extensions;
     }
 
-    public void setRepeatableParameters(Method handlerMethod, Operation operation, Components components) {
-        // get the repeatable paramters outside operation tag
+    public void setParametersMethodLevel(Method handlerMethod, Operation operation, Components components) {
+        // get the repeatable parameters outside operation tag
         List<io.swagger.v3.oas.annotations.Parameter> parameters = ReflectionUtils.getRepeatableAnnotations(handlerMethod,
                 io.swagger.v3.oas.annotations.Parameter.class);
+        buildParameters(parameters, operation, components);
+    }
 
-        // build parameters
+    private void buildParameters(List<io.swagger.v3.oas.annotations.Parameter> parameters, Operation operation, Components components) {
         for (io.swagger.v3.oas.annotations.Parameter parameterDoc : parameters) {
             Parameter parameter = parameterBuilder.buildParameterFromDoc(parameterDoc, components);
             operation.addParametersItem(parameter);

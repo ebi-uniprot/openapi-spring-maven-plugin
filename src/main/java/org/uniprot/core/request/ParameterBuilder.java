@@ -162,19 +162,15 @@ public class ParameterBuilder {
             ResolvedSchema resolvedSchema = ModelConverters.getInstance()
                     .resolveAsResolvedSchema(new AnnotatedType(returnType).resolveAsRef(true));
 
-            // LOGGER.info("In resolvedSchema {}", resolvedSchema);
-            // LOGGER.info("In resolvedSchema.schema {}", resolvedSchema.schema);
             if (resolvedSchema.schema != null) {
                 schemaN = resolvedSchema.schema;
                 Map<String, Schema> schemaMap = resolvedSchema.referencedSchemas;
-                // LOGGER.info("In resolvedSchema.referencedSchemas {}", resolvedSchema.referencedSchemas);
                 if (schemaMap != null) {
                     schemaMap.forEach(components::addSchemas);
                 }
             }
-        } else { // TODO Note introduced the components
+        } else {
             schemaN = SpringDocAnnotationsUtils.resolveSchemaFromType(parameter.getType(), null, null, null);
-//            schemaN = SpringDocAnnotationsUtils.resolveSchemaFromType(parameter.getType(), components, null);
         }
         return schemaN;
     }
@@ -182,9 +178,6 @@ public class ParameterBuilder {
     public <A extends Annotation> A getParameterAnnotation(Method handlerMethod,
                                                            java.lang.reflect.Parameter parameter, int i, Class<A> annotationType) {
         A parameterDoc = AnnotationUtils.getAnnotation(parameter, annotationType);
-        // LOGGER.info("Parameter {}", parameter);
-        // LOGGER.info("annotationType {}", annotationType);
-        // LOGGER.info("parameterDoc {}", parameterDoc);
         if (parameterDoc == null) {
             Set<Method> methods = MethodUtils.getOverrideHierarchy(handlerMethod, ClassUtils.Interfaces.INCLUDE);
             for (Method methodOverriden : methods) {

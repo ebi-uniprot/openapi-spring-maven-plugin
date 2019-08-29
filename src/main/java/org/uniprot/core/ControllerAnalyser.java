@@ -21,8 +21,7 @@ public class ControllerAnalyser {
                 if (method.isSynthetic()) {
                     continue;
                 }
-                // TODO we may need to see other type of method level mapping here like @GetMapping
-                // it may work with other type such as @GetMapping
+
                 RequestMapping methodRequestMapping = findMergedAnnotation(method, RequestMapping.class);
 
                 // Look for method-level @RequestMapping annotation

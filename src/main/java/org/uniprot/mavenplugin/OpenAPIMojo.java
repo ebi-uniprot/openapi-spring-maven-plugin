@@ -43,7 +43,6 @@ import java.util.*;
  * @author Modified by sahmad to make it non-spring project
  */
 
-//TODO see other attributes in Mojo annotation
 @Mojo(name = "oas-generate", defaultPhase = LifecyclePhase.COMPILE, configurator = "include-project-dependencies",
         requiresDependencyResolution = ResolutionScope.COMPILE_PLUS_RUNTIME, threadSafe = true)
 public class OpenAPIMojo extends AbstractMojo {
@@ -57,7 +56,7 @@ public class OpenAPIMojo extends AbstractMojo {
     @Parameter(defaultValue = "target/generated-sources/swagger/")
     private String openApiDirectory;
 
-    @Parameter(defaultValue = "openapi.yaml")
+    @Parameter(defaultValue = "openapi3.yaml")
     private String openApiFileName;
 
 
@@ -77,8 +76,6 @@ public class OpenAPIMojo extends AbstractMojo {
         try {
             OpenAPI openAPI = getOpenApi();
             String yamlString = Yaml.mapper().writeValueAsString(openAPI);
-            // LOGGER.info("The Open API 3.0.1 Spec ");
-            //// LOGGER.info(yamlString);
             FileHelper.writeToFile(yamlString, this.openApiDirectory, this.openApiFileName);
         } catch (JsonProcessingException e) {
             LOGGER.error(e.getMessage());
@@ -94,37 +91,28 @@ public class OpenAPIMojo extends AbstractMojo {
         generalInfoBuilder.build(openAPIBuilder.getOpenAPI());
 
         Reflections reflections = new Reflections(this.packageToScan);
-        // TODO think about other types of annotation on the controller classes.
+        // read all the classes which can have REST APIs
         Set<Class<?>> restControllers = reflections.getTypesAnnotatedWith(RestController.class);
         Set<Class<?>> controllers = reflections.getTypesAnnotatedWith(Controller.class);
-        // LOGGER.info("No. of controllers found {}", restControllers.size());
         Set<Class<?>> requestMappingClasses = reflections.getTypesAnnotatedWith(RequestMapping.class);
         Set<Class<?>> allRequiredClasses = new HashSet<>();
         allRequiredClasses.addAll(restControllers);
         allRequiredClasses.addAll(requestMappingClasses);
         allRequiredClasses.addAll(controllers);
 
-        // calculate generic responses TODO write a test case for controller adbvice
+        // calculate generic responses TODO write a test case for controller advice
         Set<Class<?>> controllerAdvices = reflections.getTypesAnnotatedWith(ControllerAdvice.class);
         responseBuilder.buildGenericResponse(openAPIBuilder.getComponents(), controllerAdvices);
 
-        //TODO test it. earlier io was passing rest contorller now, i am passing the all Required Classes
+        // get the method --> SpringMethod map
         Map<String, SpringControllerMethod> resourceMap = generateResourceMap(allRequiredClasses);
+
 
         populateControllerPaths(resourceMap);
 
         LOGGER.info("Time taken to generate openapi doc is: {} ms", Duration.between(start, Instant.now()).toMillis());
 
         return openAPIBuilder.getOpenAPI();
-    }
-
-    // Do not delete this method. Can be used for testing
-    public void setPackageToScan(String packageToScan) {
-        this.packageToScan = packageToScan;
-    }
-
-    public void setOpenApiFileName(String openApiFileName){
-        this.openApiFileName = openApiFileName;
     }
 
     // init the builders
@@ -197,7 +185,7 @@ public class OpenAPIMojo extends AbstractMojo {
 
         Components components = openAPIBuilder.getComponents();
         // add repeatable param see test case in RepeatableParamertersResource
-        operationBuilder.setRepeatableParameters(handlerMethod, operation, components);
+        operationBuilder.setParametersMethodLevel(handlerMethod, operation, components);
         // Add documentation from operation annotation
         if (apiOperation != null) {
             operationBuilder.parse(components, apiOperation, operation, openAPI, mediaAttributes);
@@ -215,5 +203,15 @@ public class OpenAPIMojo extends AbstractMojo {
         Paths paths = openAPIBuilder.getPaths();
         PathItem pathItemObject = this.pathItemBuilder.buildPathItem(requestMethod, operation, operationPath, paths);
         paths.addPathItem(operationPath, pathItemObject);
+    }
+
+    // Do not delete this method. For testing
+    public void setPackageToScan(String packageToScan) {
+        this.packageToScan = packageToScan;
+    }
+
+    // Do not delete this method. For testing
+    public void setOpenApiFileName(String openApiFileName){
+        this.openApiFileName = openApiFileName;
     }
 }

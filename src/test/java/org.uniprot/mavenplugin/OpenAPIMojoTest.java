@@ -31,7 +31,7 @@ public class OpenAPIMojoTest {
         openAPIMojo.execute();
 
         // read the generated file
-        File yamlFile = new File("target/generated-sources/swagger/openapi.yaml");
+        File yamlFile = new File("target/generated-sources/swagger/openapi3.yaml");
         String yamlContent = FileUtils.readFileToString(yamlFile, "UTF-8");
         OpenAPI openAPI = Yaml.mapper().readValue(yamlContent, OpenAPI.class);
 
