@@ -7,6 +7,7 @@ import io.swagger.v3.core.converter.ResolvedSchema;
 import io.swagger.v3.core.util.AnnotationsUtils;
 import io.swagger.v3.core.util.PrimitiveType;
 import io.swagger.v3.oas.annotations.extensions.Extension;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.ExternalDocumentation;
@@ -143,6 +144,10 @@ public class SpringDocAnnotationsUtils extends AnnotationsUtils {
     private static void updateSchemaFromSchemaAnnotation(Schema schema, io.swagger.v3.oas.annotations.media.Schema schemaAnnotation) {
         if (schema != null && schemaAnnotation != null) {
 
+            if(schemaAnnotation instanceof io.swagger.v3.oas.annotations.media.ArraySchema){
+                updateSchemaFromArraySchemaAnnotation(schema, (ArraySchema) schemaAnnotation);
+            }
+
             if (StringUtils.isBlank(schema.getName()) && StringUtils.isNotBlank(schemaAnnotation.name())) {
                 schema.name(schemaAnnotation.name());
             }
@@ -248,6 +253,25 @@ public class SpringDocAnnotationsUtils extends AnnotationsUtils {
             }
         }
     }
+    private static void updateSchemaFromArraySchemaAnnotation(Schema schema, io.swagger.v3.oas.annotations.media.ArraySchema arrSchemaAnnotation) {
+        Integer minItems = schema.getMinItems();
+        if (minItems == null && arrSchemaAnnotation.minItems() != Integer.MAX_VALUE) {
+            schema.minItems(arrSchemaAnnotation.minItems());
+        }
+        Integer maxItems = schema.getMaxItems();
+        if (maxItems == null && arrSchemaAnnotation.maxItems() != Integer.MIN_VALUE) {
+            schema.maxItems(arrSchemaAnnotation.maxItems());
+        }
+        Boolean uniqueItems = schema.getUniqueItems();
+        if (uniqueItems == null && arrSchemaAnnotation.uniqueItems()) {
+            schema.uniqueItems(arrSchemaAnnotation.uniqueItems());
+        }
+        Map<String, Object> extensions = schema.getExtensions();
+        if (CollectionUtils.isEmpty(extensions) && arrSchemaAnnotation.extensions().length > 0) {
+            schema.extensions(AnnotationsUtils.getExtensions(arrSchemaAnnotation.extensions()));
+        }
+    }
+
 
     private static Boolean getReadOnly(io.swagger.v3.oas.annotations.media.Schema schema) {
         if (schema != null && schema.accessMode().equals(io.swagger.v3.oas.annotations.media.Schema.AccessMode.READ_ONLY)) {

@@ -85,30 +85,9 @@ public class ParameterBuilder {
         setParameterStyle(parameter, parameterDoc);
         setParameterExplode(parameter, parameterDoc);
 
-//        Schema schemaFromAnnot = null;
-//        if (AnnotationsUtils.hasSchemaAnnotation(parameterDoc.schema())) {
-//            Optional<Schema> optSchema = AnnotationsUtils.getSchemaFromAnnotation(parameterDoc.schema(), components, null);
-//            if (optSchema.isPresent()) {
-//                schemaFromAnnot = optSchema.get();
-//            }
-//        }
-
         Type type = ParameterProcessor.getParameterType(parameterDoc);
         Schema schema = this.calculateSchema(components, type, parameter.getName(), parameterDoc.schema());
         parameter.setSchema(schema);
-
-//        Schema computedSchema = this.calculateSchema(components, type, parameter.getName());
-//        if(schemaFromAnnot != null){
-//            if(StringUtils.isEmpty(schemaFromAnnot.getType())){
-//                // set type from computed one
-//                schemaFromAnnot.setType(computedSchema.getType());
-//            }
-//            parameter.setSchema(schemaFromAnnot);
-//        } else {
-//            parameter.setSchema(computedSchema);
-//        }
-
-
 
         return parameter;
     }
