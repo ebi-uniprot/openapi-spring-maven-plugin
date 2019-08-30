@@ -1,6 +1,10 @@
 # Swagger Maven Plugin for Spring MVC
 
-This maven plugin generates Open Specification 3.0.1 (OAS3) for your Spring Rest Project. It supports most of the Swagger 2+ and Spring Web annotation. It is simple to use and generates the OAS3 specifaction in yaml format.    
+This maven plugin generates Open Specification 3.0.1 (OAS3) for your Spring Rest Project. It supports most of the Swagger 2+ and Spring Web annotation. It is simple to use and generates the OAS3 specifaction in yaml format. Please note that it is the first release so there are few bugs, we will fix them.    
+
+#Prerequisite
+* Maven >= 3.3.9
+* Java 8
 
 # Features
 
@@ -50,6 +54,31 @@ Import the plugin in your project by adding following configuration in your `plu
 | `openApiDirectory` | Path of the directory where you want to generate the Open API Specification yaml file. Defaults to `target/generated-sources/swagger/` |
 | `openApiFileName` | Name of the Open API Specification yaml file. Defaults to `openapi3.yaml` |
 | `serverBaseUrl` | Server URL. Default to `localhost` |
+
+#Build the source 
+* `mvn clean install`
+* `mcn clean install -DskipTests` -- To skip the test
+
+#Dependency conflicts 
+If you face any dependency conflict after adding the plugin, use the below command to exclude duplicate dependency:
+
+`mvn dependency:tree`
+
+An example to exclude `slf4j-log4j12` :
+
+```xml
+        <dependency>
+            <groupId>org.uniprot</groupId>
+            <artifactId>openapi-maven-plugin</artifactId>
+            <version>${openapi-maven-plugin.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+```
 
 # Credit
 The project uses codes or inspires from the codes from the below 3 projects. Thanks to them for writing such code.

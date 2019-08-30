@@ -6,11 +6,26 @@
     <packaging>maven-plugin</packaging>
     <version>1.0-SNAPSHOT</version>
     <name>Maven plugin to generate OpenAPI Spec</name>
-    <url>http://maven.apache.org</url>
+    <description>A maven plugin to generate OpenAPI specification 3.0.1 from Spring MVC</description>
+    <url>https://github.com/ebi-uniprot/openapi-spring-maven-plugin</url>
+    <licenses>
+        <license>
+            <name>Apache license</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <id>sahmad-ebi</id>
+            <name>Shadab Ahmad</name>
+            <timezone>+0</timezone>
+        </developer>
+    </developers>
     <properties>
         <io.swagger.core.v3.version>2.0.8</io.swagger.core.v3.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.version>3.3.9</maven.version>
+        <spring.version>5.0.13.RELEASE</spring.version>
     </properties>
 
     <dependencies>
@@ -105,27 +120,27 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
-            <version>5.0.13.RELEASE</version>
+            <version>${spring.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-aop</artifactId>
-            <version>5.0.13.RELEASE</version>
+            <version>${spring.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
-            <version>5.0.13.RELEASE</version>
+            <version>${spring.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-beans</artifactId>
-            <version>5.0.13.RELEASE</version>
+            <version>${spring.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
-            <version>5.0.13.RELEASE</version>
+            <version>${spring.version}</version>
         </dependency>
         <dependency>
             <groupId>org.reflections</groupId>
@@ -148,7 +163,6 @@
             <artifactId>spring-data-solr</artifactId>
             <version>4.0.5.RELEASE</version>
         </dependency>
-
         <dependency>
             <groupId>org.codehaus.jettison</groupId>
             <artifactId>jettison</artifactId>
