@@ -51,5 +51,11 @@ Import the plugin in your project by adding following configuration in your `plu
 | `openApiFileName` | Name of the Open API Specification yaml file. Defaults to `openapi3.yaml` |
 | `serverBaseUrl` | Server URL. Default to `localhost` |
 
+# Credit
+The project uses codes or inspires from the codes from the below 3 projects. Thanks to them for writing such code.
+
+##### 1.  https://github.com/springdoc/springdoc-openapi
+##### 2.  https://github.com/kongchen/swagger-maven-plugin
+##### 3.  https://github.com/swagger-api/swagger-core
 
 
