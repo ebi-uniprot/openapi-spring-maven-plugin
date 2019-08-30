@@ -35,7 +35,10 @@ import org.uniprot.utils.SpringControllerMethod;
 import java.lang.reflect.Method;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Originally written by https://github.com/springdoc as a part of class AbstractOpenApiResource
@@ -184,8 +187,12 @@ public class OpenAPIMojo extends AbstractMojo {
         operation = tagsBuilder.build(handlerMethod, operation, openAPI);
 
         Components components = openAPIBuilder.getComponents();
-        // add repeatable param see test case in RepeatableParamertersResource
+
+        // add repeatable param see test case in RepeatableParamertersResource.java
         operationBuilder.setParametersMethodLevel(handlerMethod, operation, components);
+
+        // add @ApiResponse
+        operationBuilder.setApiResponseMethodLevel(handlerMethod, operation, components, mediaAttributes);
         // Add documentation from operation annotation
         if (apiOperation != null) {
             operationBuilder.parse(components, apiOperation, operation, openAPI, mediaAttributes);

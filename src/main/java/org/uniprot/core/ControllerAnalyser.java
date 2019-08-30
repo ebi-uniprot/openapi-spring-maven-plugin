@@ -4,8 +4,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.uniprot.utils.SpringControllerMethod;
 import org.uniprot.utils.SpringUtils;
+
 import java.lang.reflect.Method;
 import java.util.Map;
+
 import static org.springframework.core.annotation.AnnotatedElementUtils.findMergedAnnotation;
 
 public class ControllerAnalyser {

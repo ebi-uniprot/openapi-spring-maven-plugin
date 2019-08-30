@@ -1,0 +1,28 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+- url: localhost
+  description: ' Default server url'
+tags:
+- name: Fourth Tag Full
+  description: desc
+  externalDocs:
+    description: docs desc
+paths:
+  /tagsinmethod:
+    get:
+      tags:
+      - Second Tag
+      - Third Tag
+      - Fourth Tag Full
+      operationId: getTags
+      responses:
+        200:
+          description: default response
+          content:
+            '*/*':
+              schema:
+                type: string
+components: {}

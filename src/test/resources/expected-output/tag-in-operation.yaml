@@ -1,0 +1,22 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+- url: localhost
+  description: ' Default server url'
+paths:
+  /tagoperation:
+    get:
+      tags:
+      - Example Tag
+      - Second Tag
+      operationId: getTags
+      responses:
+        200:
+          description: default response
+          content:
+            '*/*':
+              schema:
+                type: string
+components: {}

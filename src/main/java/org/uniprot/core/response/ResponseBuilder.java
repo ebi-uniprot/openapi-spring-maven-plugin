@@ -120,7 +120,7 @@ public class ResponseBuilder {
                 buildApiResponses(components, method, apiResponsesOp, methodProduces, httpCode, apiResponse);
             }
         } else {
-            // Use reponse parameters with no descirption filled - No documentation
+            // Use response parameters with no description filled - No documentation
             // available
             String httpCode = evaluateResponseStatus(method, method.getClass(), isGeneric);
             if (httpCode != null)

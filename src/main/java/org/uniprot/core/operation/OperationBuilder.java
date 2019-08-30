@@ -82,8 +82,10 @@ public class OperationBuilder {
         requestBodyBuilder.buildRequestBodyFromDoc(apiOperation.requestBody(), mediaAttributes.getClassConsumes(),
                 mediaAttributes.getMethodConsumes(), components, null).ifPresent(operation::setRequestBody);
 
-        // build response
-        buildResponse(components, apiOperation, operation, mediaAttributes);
+        // build response if not already set by method level apiresponse annotation
+        if(CollectionUtils.isEmpty(operation.getResponses())) {
+            buildResponse(components, apiOperation, operation, mediaAttributes);//shadab follow from here
+        }
 
         // security
         Optional<List<SecurityRequirement>> requirementsObject = securityParser
@@ -181,7 +183,7 @@ public class OperationBuilder {
     }
 
     private Optional<ApiResponses> getApiResponses(
-            final io.swagger.v3.oas.annotations.responses.ApiResponse[] responses, String[] classProduces,
+            final List<io.swagger.v3.oas.annotations.responses.ApiResponse> responses, String[] classProduces,
             String[] methodProduces, Components components, JsonView jsonViewAnnotation) {
 
         ApiResponses apiResponsesObject = new ApiResponses();
@@ -271,7 +273,14 @@ public class OperationBuilder {
 
     private void buildResponse(Components components, io.swagger.v3.oas.annotations.Operation apiOperation,
                                Operation operation, MediaAttributes mediaAttributes) {
-        getApiResponses(apiOperation.responses(), mediaAttributes.getClassProduces(),
+
+        setApiResponses(components, Arrays.asList(apiOperation.responses()), operation, mediaAttributes);
+    }
+
+    public void setApiResponses(Components components, List<io.swagger.v3.oas.annotations.responses.ApiResponse> apiResponses,
+                                 Operation operation, MediaAttributes mediaAttributes) {
+
+        getApiResponses(apiResponses, mediaAttributes.getClassProduces(),
                 mediaAttributes.getMethodProduces(), components, null).ifPresent(responses -> {
             if (operation.getResponses() == null) {
                 operation.setResponses(responses);
@@ -331,5 +340,13 @@ public class OperationBuilder {
             Parameter parameter = parameterBuilder.buildParameterFromDoc(parameterDoc, components);
             operation.addParametersItem(parameter);
         }
+    }
+
+    public void setApiResponseMethodLevel(Method handlerMethod, Operation operation, Components components, MediaAttributes mediaAttributes) {
+        // get the repeatable ApiResponse on method level
+        List<io.swagger.v3.oas.annotations.responses.ApiResponse> apiResponses = ReflectionUtils.getRepeatableAnnotations
+                (handlerMethod, io.swagger.v3.oas.annotations.responses.ApiResponse.class);
+
+        setApiResponses(components, apiResponses, operation, mediaAttributes);
     }
 }
