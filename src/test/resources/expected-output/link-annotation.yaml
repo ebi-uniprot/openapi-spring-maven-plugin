@@ -1,0 +1,34 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+- url: localhost
+  description: ' Default server url'
+paths:
+  /links:
+    get:
+      operationId: getUser
+      parameters:
+      - name: userId
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: test description
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/User'
+          links:
+            address:
+              operationId: getAddress
+              parameters:
+                userId: $request.query.userId
+            user:
+              operationId: getUser
+              parameters:
+                userId: $request.query.userId
+components: {}
