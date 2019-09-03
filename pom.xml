@@ -27,6 +27,16 @@
         <developerConnection>scm:git:git@github.com:sahmad-ebi/openapi-spring-maven-plugin.git</developerConnection>
         <tag>0.1.SNAPSHOT</tag>
     </scm>
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
     <properties>
         <io.swagger.core.v3.version>2.0.8</io.swagger.core.v3.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
