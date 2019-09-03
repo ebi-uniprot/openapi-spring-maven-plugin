@@ -4,7 +4,7 @@
     <groupId>uk.ac.ebi.uniprot</groupId>
     <artifactId>openapi-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
-    <version>0.0-SNAPSHOT</version>
+    <version>master</version>
     <name>Maven plugin to generate OpenAPI Spec</name>
     <description>A maven plugin to generate OpenAPI specification 3.0.1 from Spring MVC</description>
     <url>https://github.com/ebi-uniprot/openapi-spring-maven-plugin</url>
@@ -25,7 +25,7 @@
         <url>git@github.com:ebi-uniprot/openapi-spring-maven-plugin.git</url>
         <connection>scm:git:git@github.com:ebi-uniprot/openapi-spring-maven-plugin.git</connection>
         <developerConnection>scm:git:git@github.com:sahmad-ebi/openapi-spring-maven-plugin.git</developerConnection>
-        <tag>0.1.SNAPSHOT</tag>
+        <tag>0.1</tag>
     </scm>
     <distributionManagement>
         <snapshotRepository>
