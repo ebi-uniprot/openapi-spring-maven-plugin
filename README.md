@@ -68,7 +68,7 @@ An example to exclude `slf4j-log4j12` :
 
 ```xml
         <dependency>
-            <groupId>org.uniprot</groupId>
+            <groupId>uk.ac.ebi.uniprot</groupId>
             <artifactId>openapi-maven-plugin</artifactId>
             <version>${openapi-maven-plugin.version}</version>
             <exclusions>

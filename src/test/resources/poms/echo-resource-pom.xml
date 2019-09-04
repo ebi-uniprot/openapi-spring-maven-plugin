@@ -21,9 +21,9 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.uniprot</groupId>
+                <groupId>uk.ac.ebi.uniprot</groupId>
                 <artifactId>openapi-maven-plugin</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>0.1</version>
                 <configuration>
                     <openApiDirectory>target/generated-sources/swagger/</openApiDirectory>
                     <openApiFileName>echo-resource.yaml</openApiFileName>

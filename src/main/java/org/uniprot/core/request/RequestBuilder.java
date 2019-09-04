@@ -81,24 +81,19 @@ public class RequestBuilder {
             // check if query param
             Parameter parameter = null;
             Class<?> paramType = parameters[i].getType();
-            // LOGGER.info("paramType {}", paramType);
             io.swagger.v3.oas.annotations.Parameter parameterDoc = parameterBuilder.getParameterAnnotation(
                     handlerMethod, parameters[i], i, io.swagger.v3.oas.annotations.Parameter.class);
-            // LOGGER.info("Is paramdoc null {}", parameterDoc);
 
             // use documentation as reference
             if (parameterDoc != null) {
                 if (parameterDoc.hidden()) {
                     continue;
                 }
-                // LOGGER.info("In here without compoenents");
                 parameter = parameterBuilder.buildParameterFromDoc(parameterDoc, null);
             }
 
             if (!isParamTypeToIgnore(paramType)) {
-                // LOGGER.info("calling for {}", pNames[i]);
                 parameter = buildParams(pNames[i], components, parameters[i], i, parameter, handlerMethod, requestMethod);
-                // LOGGER.info("parameter {}", parameter);
                 if (parameter != null && parameter.getName() != null) {
                     applyBeanValidatorAnnotations(parameter, Arrays.asList(parameters[i].getAnnotations()));
                     operationParameters.add(parameter);

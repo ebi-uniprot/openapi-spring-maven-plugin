@@ -15,6 +15,9 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.reflections.Reflections;
+import org.reflections.util.ClasspathHelper;
+import org.reflections.util.ConfigurationBuilder;
+import org.reflections.util.FilterBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -94,6 +97,8 @@ public class OpenAPIMojo extends AbstractMojo {
         generalInfoBuilder.build(openAPIBuilder.getOpenAPI());
 
         Reflections reflections = new Reflections(this.packageToScan);
+
+        //Reflections reflections = new Reflections(this.packageToScan);
         // read all the classes which can have REST APIs
         Set<Class<?>> restControllers = reflections.getTypesAnnotatedWith(RestController.class);
         Set<Class<?>> controllers = reflections.getTypesAnnotatedWith(Controller.class);
@@ -188,7 +193,7 @@ public class OpenAPIMojo extends AbstractMojo {
 
         Components components = openAPIBuilder.getComponents();
 
-        // add repeatable param see test case in RepeatableParamertersResource.java
+        // add repeatable @Parameter annotation see test case in RepeatableParamertersResource.java
         operationBuilder.setParametersMethodLevel(handlerMethod, operation, components);
 
         // add @ApiResponse
@@ -198,7 +203,7 @@ public class OpenAPIMojo extends AbstractMojo {
             operationBuilder.parse(components, apiOperation, operation, openAPI, mediaAttributes);
         }
 
-        // requests
+        // requests with params
         operation = requestBuilder.build(components, handlerMethod, requestMethod, operation, mediaAttributes);
 
         // responses

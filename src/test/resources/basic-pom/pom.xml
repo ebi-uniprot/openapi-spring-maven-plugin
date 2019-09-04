@@ -21,11 +21,11 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.uniprot</groupId>
+                <groupId>uk.ac.ebi.uniprot</groupId>
                 <artifactId>openapi-maven-plugin</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>0.1</version>
                 <configuration>
-                    <packageToScan>some.random.package</packageToScan> <!-- non existing package -->
+                    <packageToScan>org.uniprot.mavenplugin.utils</packageToScan> <!-- non existing package -->
                 </configuration>
             </plugin>
         </plugins>
