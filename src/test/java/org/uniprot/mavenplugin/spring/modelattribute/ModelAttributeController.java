@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class ModelAttributeController {
-
     @GetMapping("/user")
     public User updateUser(@ModelAttribute User user, long age){
         return user;

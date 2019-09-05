@@ -1,8 +1,6 @@
 package org.uniprot.core.operation;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.type.TypeFactory;
 import io.swagger.v3.core.util.AnnotationsUtils;
 import io.swagger.v3.core.util.ReflectionUtils;
 import io.swagger.v3.oas.models.*;
@@ -13,17 +11,16 @@ import io.swagger.v3.oas.models.parameters.Parameter;
 import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.oas.models.responses.ApiResponses;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
-import org.uniprot.core.*;
+import org.uniprot.core.MediaAttributes;
+import org.uniprot.core.SecurityParser;
+import org.uniprot.core.SpringDocAnnotationsUtils;
 import org.uniprot.core.request.ParameterBuilder;
 import org.uniprot.core.request.RequestBodyBuilder;
 
-import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -101,11 +98,6 @@ public class OperationBuilder {
         return openAPI;
     }
 
-
-    public void setCustomOperationExt(Operation operation, Method handlerMethod) {
-        Map<String, Object> extensions = getOperationExtensions(handlerMethod);
-        operation.setExtensions(extensions);
-    }
 
     private void buildExtensions(io.swagger.v3.oas.annotations.Operation apiOperation, Operation operation) {
         if (apiOperation.extensions().length > 0) {
@@ -308,25 +300,7 @@ public class OperationBuilder {
         return Optional.of(list);
     }
 
-    private Map<String, Object> getOperationExtensions(Method handlerMethod) {
-        Map<String, Object> extensions = new LinkedHashMap<>();
-        SearchRequestMeta srm = ReflectionUtils.getAnnotation(handlerMethod, SearchRequestMeta.class);
-        if (srm != null) {
-            String path = srm.path();
-            File file = new File(path);
-            try {
-                String jsonString = FileUtils.readFileToString(file, "UTF-8");
-                ObjectMapper objectMapper = new ObjectMapper();
-                TypeFactory typeFactory = objectMapper.getTypeFactory();
-                List<SearchRow> searchRows = objectMapper.readValue(jsonString, typeFactory.constructCollectionType(List.class, SearchRow.class));
-                extensions.put("x-query-param", searchRows);
-            } catch (IOException e) {
-                LOGGER.warn("Unable to read file {}", file);
-            }
-        }
 
-        return extensions;
-    }
 
     public void setParametersMethodLevel(Method handlerMethod, Operation operation, Components components) {
         // get the repeatable parameters outside operation tag

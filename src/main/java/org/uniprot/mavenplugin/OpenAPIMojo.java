@@ -182,11 +182,6 @@ public class OpenAPIMojo extends AbstractMojo {
 
         Operation operation = new Operation();
 
-
-        // specification extension for query param (search query) rules and examples
-        // set operation specification extension
-        operationBuilder.setCustomOperationExt(operation, handlerMethod);
-
         OpenAPI openAPI = openAPIBuilder.getOpenAPI();
         // compute tags
         operation = tagsBuilder.build(handlerMethod, operation, openAPI);

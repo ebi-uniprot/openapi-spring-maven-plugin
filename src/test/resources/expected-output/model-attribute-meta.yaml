@@ -1,0 +1,89 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+- url: localhost
+  description: ' Default server url'
+paths:
+  /user:
+    get:
+      operationId: modelClass
+      parameters:
+      - name: query
+        in: query
+        schema:
+          type: string
+        x-param-extra:
+        - name: id
+          type: String
+          format: ^KW-[0-9]{4}$
+          example: id:KW-1234
+        - name: keyword_id
+          type: String
+          format: ^KW-[0-9]{4}$
+          example: keyword_id:KW-1234
+        - name: name
+          type: String
+          format: Free text
+          example: name:protein
+        - name: ancestor
+          type: String
+          format: Free text
+          example: ancestor:protein
+        - name: parent
+          type: String
+          format: Free text
+          example: parent:protein
+      - name: fields
+        in: query
+        schema:
+          type: string
+        x-param-extra:
+        - name: id
+          optional: false
+        - name: keyword
+          optional: false
+        - name: description
+          optional: true
+        - name: category
+          optional: true
+        - name: synonym
+          optional: true
+        - name: gene_ontology
+          optional: true
+        - name: sites
+          optional: true
+        - name: children
+          optional: true
+        - name: parent
+          optional: true
+        - name: statistics
+          optional: true
+      - name: sort
+        in: query
+        schema:
+          type: string
+        x-param-extra:
+        - name: name_sort
+          example: name_sort asc
+      - name: otherField
+        in: query
+        schema:
+          type: string
+      - name: size
+        in: query
+        schema:
+          type: integer
+          format: int32
+      responses:
+        200:
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ModelClass'
+components:
+  schemas:
+    ModelClass:
+      type: object
