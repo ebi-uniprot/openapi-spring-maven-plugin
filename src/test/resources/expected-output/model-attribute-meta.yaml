@@ -41,25 +41,25 @@ paths:
           type: string
         x-param-extra:
         - name: id
-          optional: false
+          optional: "false"
         - name: keyword
-          optional: false
+          optional: "false"
         - name: description
-          optional: true
+          optional: "true"
         - name: category
-          optional: true
+          optional: "true"
         - name: synonym
-          optional: true
+          optional: "true"
         - name: gene_ontology
-          optional: true
+          optional: "true"
         - name: sites
-          optional: true
+          optional: "true"
         - name: children
-          optional: true
+          optional: "true"
         - name: parent
-          optional: true
+          optional: "true"
         - name: statistics
-          optional: true
+          optional: "true"
       - name: sort
         in: query
         schema:

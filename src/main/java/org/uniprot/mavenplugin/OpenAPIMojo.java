@@ -26,7 +26,7 @@ import org.uniprot.FileHelper;
 import org.uniprot.PathItemBuilder;
 import org.uniprot.core.*;
 import org.uniprot.core.operation.OperationBuilder;
-import org.uniprot.core.request.ModelAttributeParameterBuilder;
+import org.uniprot.core.request.ModelFieldParameterBuilder;
 import org.uniprot.core.request.ParameterBuilder;
 import org.uniprot.core.request.RequestBodyBuilder;
 import org.uniprot.core.request.RequestBuilder;
@@ -75,7 +75,7 @@ public class OpenAPIMojo extends AbstractMojo {
     private RequestBuilder requestBuilder;
     private ResponseBuilder responseBuilder;
     private PathItemBuilder pathItemBuilder;
-    private ModelAttributeParameterBuilder modelAttribParamBuilder;
+    private ModelFieldParameterBuilder modelAttribParamBuilder;
 
     public void execute() throws MojoExecutionException, MojoFailureException {
         try {
@@ -132,7 +132,7 @@ public class OpenAPIMojo extends AbstractMojo {
         tagsBuilder = new TagsBuilder();
         operationBuilder = new OperationBuilder(parameterBuilder, requestBodyBuilder, securityParser);
         responseBuilder = new ResponseBuilder();
-        modelAttribParamBuilder = new ModelAttributeParameterBuilder(parameterBuilder);
+        modelAttribParamBuilder = new ModelFieldParameterBuilder(parameterBuilder);
         requestBuilder = new RequestBuilder(parameterBuilder, requestBodyBuilder, modelAttribParamBuilder);
         pathItemBuilder = new PathItemBuilder(operationBuilder);
     }

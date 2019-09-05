@@ -1,0 +1,42 @@
+[
+  {
+    "name": "id",
+    "optional": "false"
+  },
+  {
+    "name": "keyword",
+    "optional": "false"
+  },
+  {
+    "name": "description",
+    "optional": "true"
+  },
+  {
+    "name": "category",
+    "optional": "true"
+  },
+  {
+    "name": "synonym",
+    "optional": "true"
+  },
+  {
+    "name": "gene_ontology",
+    "optional": "true"
+  },
+  {
+    "name": "sites",
+    "optional": "true"
+  },
+  {
+    "name": "children",
+    "optional": "true"
+  },
+  {
+    "name": "parent",
+    "optional": "true"
+  },
+  {
+    "name": "statistics",
+    "optional": "true"
+  }
+]

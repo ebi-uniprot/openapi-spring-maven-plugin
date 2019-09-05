@@ -23,11 +23,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.uniprot.core.MediaAttributes;
 
-import javax.validation.constraints.*;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.uniprot.utils.Constants.*;
 
@@ -38,16 +37,16 @@ import static org.uniprot.utils.Constants.*;
 
 public class RequestBuilder {
     private static final Logger LOGGER = LoggerFactory.getLogger(RequestBuilder.class);
-    private final ModelAttributeParameterBuilder modelAttribBuilder;
+    private final ModelFieldParameterBuilder modelAttribBuilder;
 
     private ParameterBuilder parameterBuilder;
 
     private RequestBodyBuilder requestBodyBuilder;
 
-    public RequestBuilder(ParameterBuilder parameterBuilder, RequestBodyBuilder requestBodyBuilder, ModelAttributeParameterBuilder modelAttributeParameterBuilder) {
+    public RequestBuilder(ParameterBuilder parameterBuilder, RequestBodyBuilder requestBodyBuilder, ModelFieldParameterBuilder modelFieldParameterBuilder) {
         this.parameterBuilder = parameterBuilder;
         this.requestBodyBuilder = requestBodyBuilder;
-        this.modelAttribBuilder = modelAttributeParameterBuilder;
+        this.modelAttribBuilder = modelFieldParameterBuilder;
     }
 
     boolean isParamTypeToIgnore(Class<?> paramType) {
@@ -108,7 +107,7 @@ public class RequestBuilder {
                 if (!isParamTypeToIgnore(paramType)) {
                     parameter = buildParams(pNames[i], components, parameters[i], i, parameter, handlerMethod, requestMethod);
                     if (parameter != null && parameter.getName() != null) {
-                        applyBeanValidatorAnnotations(parameter, Arrays.asList(parameters[i].getAnnotations()));
+                        parameterBuilder.applyBeanValidatorAnnotations(parameter, Arrays.asList(parameters[i].getAnnotations()));
                         operationParameters.add(parameter);
                     } else if (!RequestMethod.GET.equals(requestMethod)) {
                         RequestBody requestBody = requestBodyBuilder.calculateRequestBody(components, handlerMethod,
@@ -176,68 +175,5 @@ public class RequestBuilder {
         Schema<?> schema = parameterBuilder.calculateSchema(components, parameters, name);
         parameter.setSchema(schema);
         return parameter;
-    }
-
-    /**
-     * This is mostly a duplicate of
-     * io.swagger.v3.core.jackson.ModelResolver#applyBeanValidatorAnnotations}.
-     *
-     * @param parameter
-     * @param annotations
-     */
-    private void applyBeanValidatorAnnotations(final Parameter parameter, final List<Annotation> annotations) {
-        Map<String, Annotation> annos = new HashMap<>();
-        if (annotations != null) {
-            annotations.forEach(annotation -> annos.put(annotation.annotationType().getName(), annotation));
-        }
-
-        if (annos.containsKey(NotNull.class.getName())) {
-            parameter.setRequired(true);
-        }
-
-        Schema<?> schema = parameter.getSchema();
-
-        if (annos.containsKey(Min.class.getName())) {
-            Min min = (Min) annos.get(Min.class.getName());
-            schema.setMinimum(BigDecimal.valueOf(min.value()));
-        }
-        if (annos.containsKey(Max.class.getName())) {
-            Max max = (Max) annos.get(Max.class.getName());
-            schema.setMaximum(BigDecimal.valueOf(max.value()));
-        }
-        calculateSize(annos, schema);
-        if (annos.containsKey(DecimalMin.class.getName())) {
-            DecimalMin min = (DecimalMin) annos.get(DecimalMin.class.getName());
-            if (min.inclusive()) {
-                schema.setMinimum(BigDecimal.valueOf(Double.valueOf(min.value())));
-            } else {
-                schema.setExclusiveMinimum(!min.inclusive());
-            }
-        }
-        if (annos.containsKey(DecimalMax.class.getName())) {
-            DecimalMax max = (DecimalMax) annos.get(DecimalMax.class.getName());
-            if (max.inclusive()) {
-                schema.setMaximum(BigDecimal.valueOf(Double.valueOf(max.value())));
-            } else {
-                schema.setExclusiveMaximum(!max.inclusive());
-            }
-        }
-        if (annos.containsKey(Pattern.class.getName())) {
-            Pattern pattern = (Pattern) annos.get(Pattern.class.getName());
-            schema.setPattern(pattern.regexp());
-        }
-    }
-
-    private void calculateSize(Map<String, Annotation> annos, Schema<?> schema) {
-        if (annos.containsKey(Size.class.getName())) {
-            Size size = (Size) annos.get(Size.class.getName());
-            if (OPENAPI_ARRAY_TYPE.equals(schema.getType())) {
-                schema.setMinItems(size.min());
-                schema.setMaxItems(size.max());
-            } else if (OPENAPI_STRING_TYPE.equals(schema.getType())) {
-                schema.setMinLength(size.min());
-                schema.setMaxLength(size.max());
-            }
-        }
     }
 }

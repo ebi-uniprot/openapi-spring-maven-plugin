@@ -26,15 +26,17 @@ import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.uniprot.core.SpringDocAnnotationsUtils;
 
+import javax.validation.constraints.*;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.math.BigDecimal;
+import java.util.*;
+
+import static org.uniprot.utils.Constants.OPENAPI_ARRAY_TYPE;
+import static org.uniprot.utils.Constants.OPENAPI_STRING_TYPE;
 
 /**
  * Originally written by https://github.com/springdoc
@@ -246,5 +248,67 @@ public class ParameterBuilder {
 
     private JavaType constructType(Type type) {
         return TypeFactory.defaultInstance().constructType(type);
+    }
+    /**
+     * This is mostly a duplicate of
+     * io.swagger.v3.core.jackson.ModelResolver#applyBeanValidatorAnnotations}.
+     *
+     * @param parameter
+     * @param annotations
+     */
+    public void applyBeanValidatorAnnotations(final Parameter parameter, final List<Annotation> annotations) {
+        Map<String, Annotation> annos = new HashMap<>();
+        if (annotations != null) {
+            annotations.forEach(annotation -> annos.put(annotation.annotationType().getName(), annotation));
+        }
+
+        if (annos.containsKey(NotNull.class.getName())) {
+            parameter.setRequired(true);
+        }
+
+        Schema<?> schema = parameter.getSchema();
+
+        if (annos.containsKey(Min.class.getName())) {
+            Min min = (Min) annos.get(Min.class.getName());
+            schema.setMinimum(BigDecimal.valueOf(min.value()));
+        }
+        if (annos.containsKey(Max.class.getName())) {
+            Max max = (Max) annos.get(Max.class.getName());
+            schema.setMaximum(BigDecimal.valueOf(max.value()));
+        }
+        calculateSize(annos, schema);
+        if (annos.containsKey(DecimalMin.class.getName())) {
+            DecimalMin min = (DecimalMin) annos.get(DecimalMin.class.getName());
+            if (min.inclusive()) {
+                schema.setMinimum(BigDecimal.valueOf(Double.valueOf(min.value())));
+            } else {
+                schema.setExclusiveMinimum(!min.inclusive());
+            }
+        }
+        if (annos.containsKey(DecimalMax.class.getName())) {
+            DecimalMax max = (DecimalMax) annos.get(DecimalMax.class.getName());
+            if (max.inclusive()) {
+                schema.setMaximum(BigDecimal.valueOf(Double.valueOf(max.value())));
+            } else {
+                schema.setExclusiveMaximum(!max.inclusive());
+            }
+        }
+        if (annos.containsKey(Pattern.class.getName())) {
+            Pattern pattern = (Pattern) annos.get(Pattern.class.getName());
+            schema.setPattern(pattern.regexp());
+        }
+    }
+
+    private void calculateSize(Map<String, Annotation> annos, Schema<?> schema) {
+        if (annos.containsKey(Size.class.getName())) {
+            Size size = (Size) annos.get(Size.class.getName());
+            if (OPENAPI_ARRAY_TYPE.equals(schema.getType())) {
+                schema.setMinItems(size.min());
+                schema.setMaxItems(size.max());
+            } else if (OPENAPI_STRING_TYPE.equals(schema.getType())) {
+                schema.setMinLength(size.min());
+                schema.setMaxLength(size.max());
+            }
+        }
     }
 }

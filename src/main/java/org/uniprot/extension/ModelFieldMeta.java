@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target(value = ElementType.PARAMETER)
-public @interface ModelAttributeMeta {
+@Target(value = ElementType.FIELD)
+public @interface ModelFieldMeta {
     String path() default ""; // path to the json config file
 }

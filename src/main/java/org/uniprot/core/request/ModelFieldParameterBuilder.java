@@ -1,7 +1,7 @@
 package org.uniprot.core.request;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.type.TypeFactory;
 import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.parameters.Parameter;
 import org.apache.commons.io.FileUtils;
@@ -10,12 +10,10 @@ import org.apache.commons.lang3.reflect.TypeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
-import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.uniprot.core.SpringDocAnnotationsUtils;
-import org.uniprot.extension.ModelAttributeMeta;
-import org.uniprot.extension.ModelAttributeMetaModel;
+import org.uniprot.extension.ModelFieldMeta;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,12 +24,17 @@ import java.util.stream.Collectors;
 
 import static org.uniprot.utils.Constants.QUERY_PARAM;
 
-public class ModelAttributeParameterBuilder {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ModelAttributeParameterBuilder.class);
+/**
+ * @author sahmad
+ * Converts the fields of a model class in parameters
+ */
+
+public class ModelFieldParameterBuilder {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ModelFieldParameterBuilder.class);
 
     private final ParameterBuilder parameterBuilder;
 
-    public ModelAttributeParameterBuilder(ParameterBuilder parameterBuilder) {
+    public ModelFieldParameterBuilder(ParameterBuilder parameterBuilder) {
         this.parameterBuilder = parameterBuilder;
     }
 
@@ -41,12 +44,9 @@ public class ModelAttributeParameterBuilder {
         List<Field> fields = getFieldsFromClass(modelAttribParameter.getType());
 
         if(!CollectionUtils.isEmpty(fields)){
-            // get the @ModelAttributeMeta annotation
-            ModelAttributeMetaModel meta = getModelAttributeMetaModel(modelAttribParameter);
-
             parameters = fields
                     .stream()
-                    .map(field -> buildParameterFromField(field, meta))
+                    .map(field -> buildParameterFromField(field))
                     .filter(parameter -> parameter.isPresent())
                     .map(parameter -> parameter.get())
                     .collect(Collectors.toList());
@@ -59,7 +59,7 @@ public class ModelAttributeParameterBuilder {
         return modelAttribute != null && !BeanUtils.isSimpleProperty(TypeUtils.getRawType(paramType, null));
     }
 
-    private Optional<Parameter> buildParameterFromField(Field field, ModelAttributeMetaModel meta) {
+    private Optional<Parameter> buildParameterFromField(Field field) {
         Parameter parameter = null;
         // get the Parameter Annotation from the field
         io.swagger.v3.oas.annotations.Parameter parameterAnnotation = field.getAnnotation(io.swagger.v3.oas.annotations.Parameter.class);
@@ -70,13 +70,12 @@ public class ModelAttributeParameterBuilder {
             parameter = this.parameterBuilder.buildParameterFromDoc(parameterAnnotation, null);
         }
 
-        parameter = buildParam(QUERY_PARAM, field, parameter, meta);
+        parameter = buildParam(QUERY_PARAM, field, parameter);
+
         return Optional.of(parameter);
-
-
     }
 
-    private Parameter buildParam(String in, Field field, Parameter parameter, ModelAttributeMetaModel meta) {
+    private Parameter buildParam(String in, Field field, Parameter parameter) {
         if (parameter == null) {
             parameter = new Parameter();
         }
@@ -88,22 +87,22 @@ public class ModelAttributeParameterBuilder {
         Schema<?> schema = SpringDocAnnotationsUtils.resolveSchemaFromType(field.getType(), null, null, null);
         parameter.setSchema(schema);
 
-        if(meta != null) { // set the param extension
-            Map<String, Object> extensions = getParameterExtension(parameter.getName(), meta);
+        Map<String, Object> extensions = getParameterExtension(field);
+        if(!CollectionUtils.isEmpty(extensions)) {
             parameter.setExtensions(extensions);
         }
+
+        parameterBuilder.applyBeanValidatorAnnotations(parameter, Arrays.asList(field.getAnnotations()));
+
 
         return parameter;
     }
 
-    private Map<String, Object> getParameterExtension(String name, ModelAttributeMetaModel meta) {
+    private Map<String, Object> getParameterExtension(Field field) {
         Map<String, Object> extensions = new LinkedHashMap<>();
-        if("query".equals(name) && meta.getQueryFields() != null){
-            extensions.put("x-param-extra", meta.getQueryFields());
-        } else if("sort".equals(name) && meta.getSortFields() != null){
-            extensions.put("x-param-extra", meta.getSortFields());
-        } else if("fields".equals(name) && meta.getReturnFields() != null){
-            extensions.put("x-param-extra", meta.getReturnFields());
+        List<Map<String, Object>> paramMetaList = getParamMetaList(field);
+        if(!CollectionUtils.isEmpty(paramMetaList)){
+            extensions.put("x-param-extra", paramMetaList);
         }
 
         return extensions;
@@ -128,21 +127,21 @@ public class ModelAttributeParameterBuilder {
         return fields;
     }
 
-    private ModelAttributeMetaModel getModelAttributeMetaModel(java.lang.reflect.Parameter parameter){
-        ModelAttributeMetaModel meta = null;
-        ModelAttributeMeta modelAttribMeta = AnnotationUtils.getAnnotation(parameter, ModelAttributeMeta.class);
-        if(modelAttribMeta != null){
-            String path = modelAttribMeta.path();
+    private List<Map<String, Object>> getParamMetaList(Field field){
+        List<Map<String, Object>> modelFieldMetaList = new ArrayList<>();
+        ModelFieldMeta modelFieldMeta = field.getAnnotation(ModelFieldMeta.class);
+
+        if(modelFieldMeta != null){
+            String path = modelFieldMeta.path();
             File file = new File(path);
             try {
                 String jsonString = FileUtils.readFileToString(file, "UTF-8");
-                ObjectMapper objectMapper = new ObjectMapper();
-                TypeFactory typeFactory = objectMapper.getTypeFactory();
-                meta = objectMapper.readValue(jsonString, typeFactory.constructType(ModelAttributeMetaModel.class));
+                ObjectMapper mapper = new ObjectMapper();
+                modelFieldMetaList = mapper.readValue(jsonString, new TypeReference<List<Map<String, Object>>>(){});
             } catch (IOException e) {
                 LOGGER.warn("Unable to read file {}", file);
             }
         }
-        return meta;
+        return modelFieldMetaList;
     }
 }
