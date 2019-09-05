@@ -15,9 +15,6 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.reflections.Reflections;
-import org.reflections.util.ClasspathHelper;
-import org.reflections.util.ConfigurationBuilder;
-import org.reflections.util.FilterBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -29,6 +26,7 @@ import org.uniprot.FileHelper;
 import org.uniprot.PathItemBuilder;
 import org.uniprot.core.*;
 import org.uniprot.core.operation.OperationBuilder;
+import org.uniprot.core.request.ModelAttributeParameterBuilder;
 import org.uniprot.core.request.ParameterBuilder;
 import org.uniprot.core.request.RequestBodyBuilder;
 import org.uniprot.core.request.RequestBuilder;
@@ -77,6 +75,7 @@ public class OpenAPIMojo extends AbstractMojo {
     private RequestBuilder requestBuilder;
     private ResponseBuilder responseBuilder;
     private PathItemBuilder pathItemBuilder;
+    private ModelAttributeParameterBuilder modelAttribParamBuilder;
 
     public void execute() throws MojoExecutionException, MojoFailureException {
         try {
@@ -133,7 +132,8 @@ public class OpenAPIMojo extends AbstractMojo {
         tagsBuilder = new TagsBuilder();
         operationBuilder = new OperationBuilder(parameterBuilder, requestBodyBuilder, securityParser);
         responseBuilder = new ResponseBuilder();
-        requestBuilder = new RequestBuilder(parameterBuilder, requestBodyBuilder);
+        modelAttribParamBuilder = new ModelAttributeParameterBuilder(parameterBuilder);
+        requestBuilder = new RequestBuilder(parameterBuilder, requestBodyBuilder, modelAttribParamBuilder);
         pathItemBuilder = new PathItemBuilder(operationBuilder);
     }
 

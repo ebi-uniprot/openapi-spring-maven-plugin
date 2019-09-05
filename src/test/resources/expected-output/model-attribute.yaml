@@ -1,0 +1,86 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+- url: localhost
+  description: ' Default server url'
+paths:
+  /user:
+    get:
+      operationId: updateUser
+      parameters:
+      - name: id
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: username
+        in: query
+        schema:
+          type: string
+      - name: firstName
+        in: query
+        schema:
+          type: string
+      - name: lastName
+        in: query
+        schema:
+          type: string
+      - name: email
+        in: query
+        schema:
+          type: string
+      - name: password
+        in: query
+        schema:
+          type: string
+      - name: phone
+        in: query
+        schema:
+          type: string
+      - name: userStatus
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: age
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        200:
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/User'
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        username:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        phone:
+          type: string
+        userStatus:
+          type: integer
+          description: User Status
+          format: int32
+      xml:
+        name: User

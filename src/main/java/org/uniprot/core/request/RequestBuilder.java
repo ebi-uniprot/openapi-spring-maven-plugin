@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.data.solr.core.query.SimpleQuery;
 import org.springframework.http.HttpMethod;
 import org.springframework.util.CollectionUtils;
@@ -37,14 +38,16 @@ import static org.uniprot.utils.Constants.*;
 
 public class RequestBuilder {
     private static final Logger LOGGER = LoggerFactory.getLogger(RequestBuilder.class);
+    private final ModelAttributeParameterBuilder modelAttribBuilder;
 
     private ParameterBuilder parameterBuilder;
 
     private RequestBodyBuilder requestBodyBuilder;
 
-    public RequestBuilder(ParameterBuilder parameterBuilder, RequestBodyBuilder requestBodyBuilder) {
+    public RequestBuilder(ParameterBuilder parameterBuilder, RequestBodyBuilder requestBodyBuilder, ModelAttributeParameterBuilder modelAttributeParameterBuilder) {
         this.parameterBuilder = parameterBuilder;
         this.requestBodyBuilder = requestBodyBuilder;
+        this.modelAttribBuilder = modelAttributeParameterBuilder;
     }
 
     boolean isParamTypeToIgnore(Class<?> paramType) {
@@ -84,23 +87,34 @@ public class RequestBuilder {
             io.swagger.v3.oas.annotations.Parameter parameterDoc = parameterBuilder.getParameterAnnotation(
                     handlerMethod, parameters[i], i, io.swagger.v3.oas.annotations.Parameter.class);
 
-            // use documentation as reference
-            if (parameterDoc != null) {
-                if (parameterDoc.hidden()) {
-                    continue;
-                }
-                parameter = parameterBuilder.buildParameterFromDoc(parameterDoc, null);
-            }
+            ModelAttribute modelAttributeAnnot = AnnotationUtils.getAnnotation(parameters[i], ModelAttribute.class);
 
-            if (!isParamTypeToIgnore(paramType)) {
-                parameter = buildParams(pNames[i], components, parameters[i], i, parameter, handlerMethod, requestMethod);
-                if (parameter != null && parameter.getName() != null) {
-                    applyBeanValidatorAnnotations(parameter, Arrays.asList(parameters[i].getAnnotations()));
-                    operationParameters.add(parameter);
-                } else if (!RequestMethod.GET.equals(requestMethod)) {
-                    RequestBody requestBody = requestBodyBuilder.calculateRequestBody(components, handlerMethod,
-                            mediaAttributes, pNames, parameters, i, parameterDoc);
-                    operation.setRequestBody(requestBody);
+            // deal with ModelAttribute annotation
+            if (parameterDoc == null
+                    && modelAttribBuilder.isValidModelAttribute(parameters[i].getParameterizedType(), modelAttributeAnnot)) {//@Parameter has higher precedence than @ModelAttribute
+
+                List<Parameter> params = modelAttribBuilder.buildParametersFromModelAttribute(parameters[i]);
+                operationParameters.addAll(params);
+
+            } else {
+                // use documentation as reference
+                if (parameterDoc != null) {
+                    if (parameterDoc.hidden()) {
+                        continue;
+                    }
+                    parameter = parameterBuilder.buildParameterFromDoc(parameterDoc, null);
+                }
+
+                if (!isParamTypeToIgnore(paramType)) {
+                    parameter = buildParams(pNames[i], components, parameters[i], i, parameter, handlerMethod, requestMethod);
+                    if (parameter != null && parameter.getName() != null) {
+                        applyBeanValidatorAnnotations(parameter, Arrays.asList(parameters[i].getAnnotations()));
+                        operationParameters.add(parameter);
+                    } else if (!RequestMethod.GET.equals(requestMethod)) {
+                        RequestBody requestBody = requestBodyBuilder.calculateRequestBody(components, handlerMethod,
+                                mediaAttributes, pNames, parameters, i, parameterDoc);
+                        operation.setRequestBody(requestBody);
+                    }
                 }
             }
         }
