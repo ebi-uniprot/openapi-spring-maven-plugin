@@ -170,7 +170,7 @@ public class ParameterBuilder {
                 }
             }
         } else {
-            schemaN = SpringDocAnnotationsUtils.resolveSchemaFromType(parameter.getType(), null, null, null);
+            schemaN = SpringDocAnnotationsUtils.resolveSchemaFromType(parameter.getType(), components, null, null);
         }
         return schemaN;
     }
