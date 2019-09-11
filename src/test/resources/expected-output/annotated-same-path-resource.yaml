@@ -9,7 +9,7 @@ paths:
   /sameOperationName:
     get:
       description: Same Operation Name
-      operationId: getUser
+      operationId: getUser_1
       responses:
         200:
           description: default response
@@ -19,7 +19,7 @@ paths:
                 type: string
     delete:
       description: Same Operation Name Duplicated
-      operationId: getUser_1
+      operationId: getUser
       requestBody:
         content:
           '*/*':

@@ -27,7 +27,7 @@
                 <configuration>
                     <openApiDirectory>target/generated-sources/swagger/</openApiDirectory>
                     <openApiFileName>examples-resource.yaml</openApiFileName>
-                    <packageToScan>org.uniprot.mavenplugin.swagger.example</packageToScan>
+                    <packageToScan>ebi.ac.uk.uniprot.openapi.mavenplugin.swagger.example</packageToScan>
                     <serverBaseUrl>localhost</serverBaseUrl>
                 </configuration>
             </plugin>

@@ -27,7 +27,7 @@
                 <configuration>
                     <openApiDirectory>target/generated-sources/swagger/</openApiDirectory>
                     <openApiFileName>annotated-same-path-resource.yaml</openApiFileName>
-                    <packageToScan>org.uniprot.mavenplugin.swagger.operation.samepath.annot</packageToScan>
+                    <packageToScan>ebi.ac.uk.uniprot.openapi.mavenplugin.swagger.operation.samepath.annot</packageToScan>
                     <serverBaseUrl>localhost</serverBaseUrl>
                 </configuration>
             </plugin>

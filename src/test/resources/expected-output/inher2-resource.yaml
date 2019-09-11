@@ -10,7 +10,7 @@ paths:
     get:
       summary: Find pet by ID Operation in SubResource
       description: Returns a pet in SubResource
-      operationId: getPetById
+      operationId: getPetById_1
       parameters:
       - name: petId
         in: path
@@ -40,7 +40,7 @@ paths:
     get:
       summary: Find pet by ID
       description: combinatedfullyannotatedoperation/{petId}
-      operationId: getPetById_1
+      operationId: getPetById
       parameters:
       - name: petId
         in: query
@@ -67,7 +67,7 @@ paths:
           description: Pet not found
     put:
       description: combinatedsameOperationName
-      operationId: getPerson
+      operationId: getPerson_1
       responses:
         200:
           description: default response
@@ -91,7 +91,7 @@ paths:
                 type: string
     head:
       description: combinatedsameOperationNameDuplicated
-      operationId: getPerson_1
+      operationId: getPerson
       requestBody:
         content:
           '*/*':

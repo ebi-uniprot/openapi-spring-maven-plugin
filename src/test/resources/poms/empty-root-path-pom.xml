@@ -27,7 +27,7 @@
                 <configuration>
                     <openApiDirectory>target/generated-sources/swagger/</openApiDirectory>
                     <openApiFileName>empty-root-path.yaml</openApiFileName>
-                    <packageToScan>org.uniprot.mavenplugin.empty</packageToScan>
+                    <packageToScan>ebi.ac.uk.uniprot.openapi.mavenplugin.empty</packageToScan>
                     <serverBaseUrl>localhost</serverBaseUrl>
                 </configuration>
             </plugin>
