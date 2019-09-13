@@ -96,10 +96,8 @@ public class ResponseBuilder {
     private Map<String, ApiResponse> computeResponse(Components components, Method method, ApiResponses apiResponsesOp,
                                                      String[] methodProduces, boolean isGeneric) {
         // Parsing documentation, if present
-        io.swagger.v3.oas.annotations.responses.ApiResponses apiResponsesDoc = ReflectionUtils.getAnnotation(method,
-                io.swagger.v3.oas.annotations.responses.ApiResponses.class);
-        if (apiResponsesDoc != null) {
-            io.swagger.v3.oas.annotations.responses.ApiResponse[] responsesArray = apiResponsesDoc.value();
+        io.swagger.v3.oas.annotations.responses.ApiResponse[] responsesArray = getApiResponses(method);
+        if (ArrayUtils.isNotEmpty(responsesArray)) {
             for (io.swagger.v3.oas.annotations.responses.ApiResponse apiResponse2 : responsesArray) {
                 ApiResponse apiResponse1 = new ApiResponse();
                 apiResponse1.setDescription(apiResponse2.description());
@@ -107,7 +105,7 @@ public class ResponseBuilder {
                 SpringDocAnnotationsUtils.getContent(contentdoc, new String[0],
                         methodProduces == null ? new String[0] : methodProduces, null, components, null)
                         .ifPresent(apiResponse1::content);
-
+                AnnotationsUtils.getHeaders(apiResponse2.headers(), null).ifPresent(apiResponse1::headers);
                 apiResponsesOp.addApiResponse(apiResponse2.responseCode(), apiResponse1);
             }
         }
@@ -238,6 +236,23 @@ public class ResponseBuilder {
             responseStatus = HttpStatus.OK.toString();
         }
         return responseStatus;
+    }
+
+    private io.swagger.v3.oas.annotations.responses.ApiResponse[] getApiResponses(Method method) {
+        io.swagger.v3.oas.annotations.responses.ApiResponse[] responsesArray = null;
+        io.swagger.v3.oas.annotations.responses.ApiResponses apiResponsesDoc = ReflectionUtils.getAnnotation(method,
+                io.swagger.v3.oas.annotations.responses.ApiResponses.class);
+        if (apiResponsesDoc != null) {
+            responsesArray = apiResponsesDoc.value();
+        } else {
+            List<io.swagger.v3.oas.annotations.responses.ApiResponse> apiResponseDoc = ReflectionUtils
+                    .getRepeatableAnnotations(method, io.swagger.v3.oas.annotations.responses.ApiResponse.class);
+            if (!CollectionUtils.isEmpty(apiResponseDoc)) {
+                responsesArray = apiResponseDoc.stream()
+                        .toArray(io.swagger.v3.oas.annotations.responses.ApiResponse[]::new);
+            }
+        }
+        return responsesArray;
     }
 
 }

@@ -191,8 +191,6 @@ public class OpenAPIMojo extends AbstractMojo {
         // add repeatable @Parameter annotation see test case in RepeatableParamertersResource.java
         operationBuilder.setParametersMethodLevel(handlerMethod, operation, components);
 
-        // add @ApiResponse
-        operationBuilder.setApiResponseMethodLevel(handlerMethod, operation, components, mediaAttributes);
         // Add documentation from operation annotation
         if (apiOperation != null) {
             operationBuilder.parse(components, apiOperation, operation, openAPI, mediaAttributes);
