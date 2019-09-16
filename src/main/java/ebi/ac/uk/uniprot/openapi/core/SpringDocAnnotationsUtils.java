@@ -13,6 +13,7 @@ import io.swagger.v3.oas.models.ExternalDocumentation;
 import io.swagger.v3.oas.models.media.Content;
 import io.swagger.v3.oas.models.media.MediaType;
 import io.swagger.v3.oas.models.media.Schema;
+import io.swagger.v3.oas.models.media.XML;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -132,12 +133,32 @@ public class SpringDocAnnotationsUtils extends AnnotationsUtils {
         MediaType mediaType = new MediaType();
         if (!annotationContent.schema().hidden()) {
             if (components != null) {
-                getSchema(annotationContent, components, jsonViewAnnotation).ifPresent(mediaType::setSchema);
+                Optional<? extends Schema> optSchema = getSchema(annotationContent, components, jsonViewAnnotation);
+                if(optSchema.isPresent()) {
+                    Schema arraySchema = optSchema.get();
+                    //HACK FIXME set root element of xml type get the name from the array.schema name schema as xml root element
+                    Optional<XML> optXML = getSwaggerXML(annotationContent.array());
+                    if(optXML.isPresent()){
+                        arraySchema.setXml(optXML.get());
+                    }
+                   mediaType.setSchema(optSchema.get());
+                }
             } else {
                 mediaType.setSchema(schema);
             }
         }
         return mediaType;
+    }
+
+    private static Optional<XML> getSwaggerXML(ArraySchema array) {
+        if(array != null){
+            io.swagger.v3.oas.annotations.media.Schema schema = array.schema();
+            if(StringUtils.isNotBlank(schema.name())){
+                return Optional.of(new XML().name(schema.name()).wrapped(true));
+            }
+        }
+
+        return Optional.empty();
     }
 
     private static void updateSchemaFromSchemaAnnotation(Schema schema, io.swagger.v3.oas.annotations.media.Schema schemaAnnotation) {
