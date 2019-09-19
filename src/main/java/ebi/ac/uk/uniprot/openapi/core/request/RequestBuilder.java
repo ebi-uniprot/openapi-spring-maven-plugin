@@ -1,5 +1,8 @@
 package ebi.ac.uk.uniprot.openapi.core.request;
 
+import ebi.ac.uk.uniprot.openapi.FileHelper;
+import ebi.ac.uk.uniprot.openapi.core.MediaAttributes;
+import ebi.ac.uk.uniprot.openapi.extension.ModelFieldMeta;
 import ebi.ac.uk.uniprot.openapi.utils.Constants;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.Operation;
@@ -22,15 +25,13 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
-import ebi.ac.uk.uniprot.openapi.core.MediaAttributes;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * Originally written by https://github.com/springdoc
+ *
  * @author Modified by sahmad to make it non-spring project
  */
 
@@ -49,19 +50,19 @@ public class RequestBuilder {
     }
 
     boolean isParamTypeToIgnore(Class<?> paramType) {
-		return WebRequest.class.equals(paramType) || NativeWebRequest.class.equals(paramType)
-				|| javax.servlet.ServletRequest.class.isAssignableFrom(paramType)
-				|| javax.servlet.ServletResponse.class.isAssignableFrom(paramType)
-				|| javax.servlet.http.HttpSession.class.equals(paramType)
-				|| java.security.Principal.class.equals(paramType) || HttpMethod.class.equals(paramType)
-				|| java.util.Locale.class.equals(paramType) || java.util.TimeZone.class.equals(paramType)
-				|| java.time.ZoneId.class.equals(paramType) || java.io.InputStream.class.equals(paramType)
-				|| java.io.Reader.class.equals(paramType) || java.io.OutputStream.class.equals(paramType)
-				|| java.io.Writer.class.equals(paramType) || java.util.Map.class.equals(paramType)
-				|| org.springframework.ui.Model.class.equals(paramType)
-				|| org.springframework.ui.ModelMap.class.equals(paramType) || RedirectAttributes.class.equals(paramType)
-				|| Errors.class.equals(paramType) || BindingResult.class.equals(paramType)
-				|| SessionStatus.class.equals(paramType) || UriComponentsBuilder.class.equals(paramType)
+        return WebRequest.class.equals(paramType) || NativeWebRequest.class.equals(paramType)
+                || javax.servlet.ServletRequest.class.isAssignableFrom(paramType)
+                || javax.servlet.ServletResponse.class.isAssignableFrom(paramType)
+                || javax.servlet.http.HttpSession.class.equals(paramType)
+                || java.security.Principal.class.equals(paramType) || HttpMethod.class.equals(paramType)
+                || java.util.Locale.class.equals(paramType) || java.util.TimeZone.class.equals(paramType)
+                || java.time.ZoneId.class.equals(paramType) || java.io.InputStream.class.equals(paramType)
+                || java.io.Reader.class.equals(paramType) || java.io.OutputStream.class.equals(paramType)
+                || java.io.Writer.class.equals(paramType) || java.util.Map.class.equals(paramType)
+                || org.springframework.ui.Model.class.equals(paramType)
+                || org.springframework.ui.ModelMap.class.equals(paramType) || RedirectAttributes.class.equals(paramType)
+                || Errors.class.equals(paramType) || BindingResult.class.equals(paramType)
+                || SessionStatus.class.equals(paramType) || UriComponentsBuilder.class.equals(paramType)
                 || SimpleQuery.class.equals(paramType);
     }
 
@@ -117,7 +118,7 @@ public class RequestBuilder {
             }
         }
 
-        if(!CollectionUtils.isEmpty(operationParameters)){
+        if (!CollectionUtils.isEmpty(operationParameters)) {
             operation.setParameters(operationParameters);
         }
 
@@ -148,7 +149,7 @@ public class RequestBuilder {
             String name = StringUtils.isBlank(pathVar.value()) ? pName : pathVar.value();
             // check if PATH PARAM
             parameter = this.buildParam(Constants.PATH_PARAM, components, parameters, Boolean.TRUE, name, parameter);
-        } else if(cookieValue != null){
+        } else if (cookieValue != null) {
             String name = StringUtils.isBlank(cookieValue.value()) ? pName : cookieValue.value();
             parameter = this.buildParam(Constants.COOKIE_PARAM, components, parameters, Boolean.TRUE, name, parameter);
         }
@@ -160,6 +161,13 @@ public class RequestBuilder {
                 parameter.setName(pName);
             }
         }
+
+
+        ModelFieldMeta modelFieldMeta = parameterBuilder.getParameterAnnotation(handlerMethod, parameters, index, ModelFieldMeta.class);
+        if (modelFieldMeta != null) {// set parameter extension from annotation ModelFieldMeta
+            parameter.setExtensions(getExtensionFromModelFieldMeta(modelFieldMeta));
+        }
+
         return parameter;
     }
 
@@ -174,5 +182,15 @@ public class RequestBuilder {
         Schema<?> schema = parameterBuilder.calculateSchema(components, parameters, name);
         parameter.setSchema(schema);
         return parameter;
+    }
+
+    private Map<String, Object> getExtensionFromModelFieldMeta(ModelFieldMeta modelFieldMeta) {
+        Map<String, Object> extensions = new LinkedHashMap<>();
+        List<Map<String, Object>> paramMetaList = FileHelper.readMetaList(modelFieldMeta.path());
+        if (!CollectionUtils.isEmpty(paramMetaList)) {
+            extensions.put("x-param-extra", paramMetaList);
+        }
+
+        return extensions;
     }
 }

@@ -2,6 +2,7 @@ package ebi.ac.uk.uniprot.openapi.core.request;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
+import ebi.ac.uk.uniprot.openapi.core.SpringDocAnnotationsUtils;
 import ebi.ac.uk.uniprot.openapi.utils.Constants;
 import io.swagger.v3.core.converter.AnnotatedType;
 import io.swagger.v3.core.converter.ModelConverters;
@@ -25,7 +26,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.web.multipart.MultipartFile;
-import ebi.ac.uk.uniprot.openapi.core.SpringDocAnnotationsUtils;
 
 import javax.validation.constraints.*;
 import java.io.IOException;

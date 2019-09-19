@@ -1,5 +1,6 @@
 package ebi.ac.uk.uniprot.openapi.core.response;
 
+import ebi.ac.uk.uniprot.openapi.core.SpringDocAnnotationsUtils;
 import io.swagger.v3.core.converter.AnnotatedType;
 import io.swagger.v3.core.converter.ModelConverters;
 import io.swagger.v3.core.converter.ResolvedSchema;
@@ -23,7 +24,6 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import ebi.ac.uk.uniprot.openapi.core.SpringDocAnnotationsUtils;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;

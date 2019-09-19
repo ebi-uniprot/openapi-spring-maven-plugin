@@ -1,10 +1,10 @@
 package ebi.ac.uk.uniprot.openapi.core.request;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import ebi.ac.uk.uniprot.openapi.FileHelper;
+import ebi.ac.uk.uniprot.openapi.core.SpringDocAnnotationsUtils;
+import ebi.ac.uk.uniprot.openapi.extension.ModelFieldMeta;
 import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.parameters.Parameter;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.TypeUtils;
 import org.slf4j.Logger;
@@ -12,11 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import ebi.ac.uk.uniprot.openapi.core.SpringDocAnnotationsUtils;
-import ebi.ac.uk.uniprot.openapi.extension.ModelFieldMeta;
 
-import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.util.*;
@@ -130,17 +126,8 @@ public class ModelFieldParameterBuilder {
     private List<Map<String, Object>> getParamMetaList(Field field){
         List<Map<String, Object>> modelFieldMetaList = new ArrayList<>();
         ModelFieldMeta modelFieldMeta = field.getAnnotation(ModelFieldMeta.class);
-
         if(modelFieldMeta != null){
-            String path = modelFieldMeta.path();
-            File file = new File(path);
-            try {
-                String jsonString = FileUtils.readFileToString(file, "UTF-8");
-                ObjectMapper mapper = new ObjectMapper();
-                modelFieldMetaList = mapper.readValue(jsonString, new TypeReference<List<Map<String, Object>>>(){});
-            } catch (IOException e) {
-                LOGGER.warn("Unable to read file {}", file);
-            }
+            modelFieldMetaList = FileHelper.readMetaList(modelFieldMeta.path());
         }
         return modelFieldMetaList;
     }

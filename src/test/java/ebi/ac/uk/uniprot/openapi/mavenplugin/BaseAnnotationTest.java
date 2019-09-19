@@ -2,6 +2,7 @@ package ebi.ac.uk.uniprot.openapi.mavenplugin;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ebi.ac.uk.uniprot.openapi.mavenplugin.utils.TestUtils;
 import io.swagger.v3.core.util.Json;
 import net.javacrumbs.jsonunit.JsonAssert;
 import net.javacrumbs.jsonunit.core.Configuration;
@@ -10,7 +11,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.testing.MojoRule;
 import org.junit.Assert;
 import org.junit.Rule;
-import ebi.ac.uk.uniprot.openapi.mavenplugin.utils.TestUtils;
 
 import java.io.File;
 import java.io.IOException;

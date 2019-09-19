@@ -1,5 +1,7 @@
 package ebi.ac.uk.uniprot.openapi.mavenplugin.swagger.operation.inheritance2;
 
+import ebi.ac.uk.uniprot.openapi.mavenplugin.swagger.resources.exception.NotFoundException;
+import ebi.ac.uk.uniprot.openapi.mavenplugin.swagger.resources.model.Pet;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -8,8 +10,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ebi.ac.uk.uniprot.openapi.mavenplugin.swagger.resources.exception.NotFoundException;
-import ebi.ac.uk.uniprot.openapi.mavenplugin.swagger.resources.model.Pet;
 
 /**
  * Resource with Complete Operations Examples

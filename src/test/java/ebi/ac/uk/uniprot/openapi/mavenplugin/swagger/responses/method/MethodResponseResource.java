@@ -1,13 +1,13 @@
 package ebi.ac.uk.uniprot.openapi.mavenplugin.swagger.responses.method;
 
+import ebi.ac.uk.uniprot.openapi.mavenplugin.swagger.resources.exception.NotFoundException;
+import ebi.ac.uk.uniprot.openapi.mavenplugin.swagger.resources.model.Pet;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ebi.ac.uk.uniprot.openapi.mavenplugin.swagger.resources.exception.NotFoundException;
-import ebi.ac.uk.uniprot.openapi.mavenplugin.swagger.resources.model.Pet;
 
 /**
  * Resource with a Response at Method Level

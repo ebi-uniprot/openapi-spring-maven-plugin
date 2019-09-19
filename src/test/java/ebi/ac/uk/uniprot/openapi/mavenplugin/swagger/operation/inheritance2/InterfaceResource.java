@@ -1,11 +1,11 @@
 package ebi.ac.uk.uniprot.openapi.mavenplugin.swagger.operation.inheritance2;
 
+import ebi.ac.uk.uniprot.openapi.mavenplugin.swagger.resources.model.Pet;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import ebi.ac.uk.uniprot.openapi.mavenplugin.swagger.resources.model.Pet;
 
 /**
  * Interface resource

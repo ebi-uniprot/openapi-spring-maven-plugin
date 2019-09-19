@@ -1,6 +1,11 @@
 package ebi.ac.uk.uniprot.openapi.core.operation;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import ebi.ac.uk.uniprot.openapi.core.MediaAttributes;
+import ebi.ac.uk.uniprot.openapi.core.SecurityParser;
+import ebi.ac.uk.uniprot.openapi.core.SpringDocAnnotationsUtils;
+import ebi.ac.uk.uniprot.openapi.core.request.ParameterBuilder;
+import ebi.ac.uk.uniprot.openapi.core.request.RequestBodyBuilder;
 import ebi.ac.uk.uniprot.openapi.utils.Constants;
 import io.swagger.v3.core.util.AnnotationsUtils;
 import io.swagger.v3.core.util.ReflectionUtils;
@@ -16,11 +21,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
-import ebi.ac.uk.uniprot.openapi.core.MediaAttributes;
-import ebi.ac.uk.uniprot.openapi.core.SecurityParser;
-import ebi.ac.uk.uniprot.openapi.core.SpringDocAnnotationsUtils;
-import ebi.ac.uk.uniprot.openapi.core.request.ParameterBuilder;
-import ebi.ac.uk.uniprot.openapi.core.request.RequestBodyBuilder;
 
 import java.lang.reflect.Method;
 import java.util.*;

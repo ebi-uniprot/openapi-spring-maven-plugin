@@ -1,10 +1,10 @@
 package ebi.ac.uk.uniprot.openapi.mavenplugin.swagger.operation.inheritance1;
 
+import ebi.ac.uk.uniprot.openapi.mavenplugin.swagger.resources.model.Pet;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
-import ebi.ac.uk.uniprot.openapi.mavenplugin.swagger.resources.model.Pet;
 
 /**
  * SubResource

@@ -1,5 +1,6 @@
 package ebi.ac.uk.uniprot.openapi.mavenplugin.swagger.parameter.arrayschema;
 
+import ebi.ac.uk.uniprot.openapi.mavenplugin.swagger.parameter.resource.ParametersResource;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.Explode;
@@ -10,7 +11,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ebi.ac.uk.uniprot.openapi.mavenplugin.swagger.parameter.resource.ParametersResource;
 
 @RestController
 public class ArraySchemaResource {

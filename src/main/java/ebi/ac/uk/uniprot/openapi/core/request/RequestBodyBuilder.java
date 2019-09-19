@@ -1,6 +1,7 @@
 package ebi.ac.uk.uniprot.openapi.core.request;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import ebi.ac.uk.uniprot.openapi.core.MediaAttributes;
 import ebi.ac.uk.uniprot.openapi.utils.Constants;
 import io.swagger.v3.core.converter.AnnotatedType;
 import io.swagger.v3.core.converter.ModelConverters;
@@ -16,7 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestPart;
-import ebi.ac.uk.uniprot.openapi.core.MediaAttributes;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;

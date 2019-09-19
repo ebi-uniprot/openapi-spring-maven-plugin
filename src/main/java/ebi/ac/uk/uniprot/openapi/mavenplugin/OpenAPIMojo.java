@@ -2,8 +2,15 @@ package ebi.ac.uk.uniprot.openapi.mavenplugin;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import ebi.ac.uk.uniprot.openapi.FileHelper;
+import ebi.ac.uk.uniprot.openapi.PathItemBuilder;
 import ebi.ac.uk.uniprot.openapi.core.*;
+import ebi.ac.uk.uniprot.openapi.core.operation.OperationBuilder;
 import ebi.ac.uk.uniprot.openapi.core.request.ModelFieldParameterBuilder;
+import ebi.ac.uk.uniprot.openapi.core.request.ParameterBuilder;
+import ebi.ac.uk.uniprot.openapi.core.request.RequestBodyBuilder;
+import ebi.ac.uk.uniprot.openapi.core.request.RequestBuilder;
+import ebi.ac.uk.uniprot.openapi.core.response.ResponseBuilder;
 import ebi.ac.uk.uniprot.openapi.utils.SpringControllerMethod;
 import io.swagger.v3.core.util.ReflectionUtils;
 import io.swagger.v3.core.util.Yaml;
@@ -25,13 +32,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import ebi.ac.uk.uniprot.openapi.FileHelper;
-import ebi.ac.uk.uniprot.openapi.PathItemBuilder;
-import ebi.ac.uk.uniprot.openapi.core.operation.OperationBuilder;
-import ebi.ac.uk.uniprot.openapi.core.request.ParameterBuilder;
-import ebi.ac.uk.uniprot.openapi.core.request.RequestBodyBuilder;
-import ebi.ac.uk.uniprot.openapi.core.request.RequestBuilder;
-import ebi.ac.uk.uniprot.openapi.core.response.ResponseBuilder;
 
 import java.lang.reflect.Method;
 import java.time.Duration;

@@ -1,10 +1,10 @@
 package ebi.ac.uk.uniprot.openapi.mavenplugin.swagger.operation.server;
 
+import ebi.ac.uk.uniprot.openapi.mavenplugin.swagger.resources.model.Pet;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.servers.Server;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import ebi.ac.uk.uniprot.openapi.mavenplugin.swagger.resources.model.Pet;
 
 /**
  * Resource With a Hidden Operation

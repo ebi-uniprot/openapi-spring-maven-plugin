@@ -16,9 +16,9 @@
 
 package ebi.ac.uk.uniprot.openapi.mavenplugin.swagger.resources.data;
 
-import ebi.ac.uk.uniprot.openapi.mavenplugin.swagger.resources.model.Tag;
 import ebi.ac.uk.uniprot.openapi.mavenplugin.swagger.resources.model.Category;
 import ebi.ac.uk.uniprot.openapi.mavenplugin.swagger.resources.model.Pet;
+import ebi.ac.uk.uniprot.openapi.mavenplugin.swagger.resources.model.Tag;
 
 import java.util.ArrayList;
 import java.util.List;

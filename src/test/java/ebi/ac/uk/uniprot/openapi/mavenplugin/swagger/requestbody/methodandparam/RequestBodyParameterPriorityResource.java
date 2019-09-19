@@ -1,5 +1,6 @@
 package ebi.ac.uk.uniprot.openapi.mavenplugin.swagger.requestbody.methodandparam;
 
+import ebi.ac.uk.uniprot.openapi.mavenplugin.swagger.resources.model.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -8,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import ebi.ac.uk.uniprot.openapi.mavenplugin.swagger.resources.model.User;
 
 /**
  * Resource with RequestBody inside Operation and another in Method
