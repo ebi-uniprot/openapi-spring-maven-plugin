@@ -8,7 +8,8 @@ public class TagAnnotationTest extends BaseAnnotationTest {
     @Test//FIXME we don't support swagger annotation e.g. @Tag at class level
     public void testTagAtClassLevel() throws Exception {
         // generate OAS for the given package
-        generateOAS3("ebi.ac.uk.uniprot.openapi.mavenplugin.swagger.tags.classlevel", "tag-class-level.yaml");
+        generateOAS3( "tag-class-level.yaml",
+                "ebi.ac.uk.uniprot.openapi.mavenplugin.swagger.tags.classlevel");
 
         // compare the result
         compareYamlFiles("tag-class-level.yaml");
@@ -17,7 +18,8 @@ public class TagAnnotationTest extends BaseAnnotationTest {
     @Test
     public void testTagAtMethodLevel() throws Exception {
         // generate OAS for the given package
-        generateOAS3("ebi.ac.uk.uniprot.openapi.mavenplugin.swagger.tags.methodlevel", "tag-method-level.yaml");
+        generateOAS3( "tag-method-level.yaml",
+                "ebi.ac.uk.uniprot.openapi.mavenplugin.swagger.tags.methodlevel");
 
         // compare the result
         compareYamlFiles("tag-method-level.yaml");
@@ -26,7 +28,8 @@ public class TagAnnotationTest extends BaseAnnotationTest {
     @Test
     public void testTagInsideOperation() throws Exception {
         // generate OAS for the given package
-        generateOAS3("ebi.ac.uk.uniprot.openapi.mavenplugin.swagger.tags.insideop", "tag-in-operation.yaml");
+        generateOAS3( "tag-in-operation.yaml",
+                "ebi.ac.uk.uniprot.openapi.mavenplugin.swagger.tags.insideop");
 
         // compare the result
         compareYamlFiles("tag-in-operation.yaml");
@@ -35,7 +38,8 @@ public class TagAnnotationTest extends BaseAnnotationTest {
     @Test
     public void testTagMixed() throws Exception {
         // generate OAS for the given package
-        generateOAS3("ebi.ac.uk.uniprot.openapi.mavenplugin.swagger.tags.mixed", "tag-mixed.yaml");
+        generateOAS3( "tag-mixed.yaml",
+                "ebi.ac.uk.uniprot.openapi.mavenplugin.swagger.tags.mixed");
 
         // compare the result
         compareYamlFiles("tag-mixed.yaml");

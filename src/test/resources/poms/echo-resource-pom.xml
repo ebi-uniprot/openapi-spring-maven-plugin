@@ -23,11 +23,13 @@
             <plugin>
                 <groupId>uk.ac.ebi.uniprot</groupId>
                 <artifactId>openapi-maven-plugin</artifactId>
-                <version>0.1</version>
+                <version>master</version>
                 <configuration>
                     <openApiDirectory>target/generated-sources/swagger/</openApiDirectory>
                     <openApiFileName>echo-resource.yaml</openApiFileName>
-                    <packageToScan>ebi.ac.uk.uniprot.openapi.mavenplugin.echo</packageToScan>
+                    <packageLocations>
+                        <packageLocation>ebi.ac.uk.uniprot.openapi.mavenplugin.echo</packageLocation>
+                    </packageLocations>
                     <serverBaseUrl>localhost</serverBaseUrl>
                 </configuration>
             </plugin>

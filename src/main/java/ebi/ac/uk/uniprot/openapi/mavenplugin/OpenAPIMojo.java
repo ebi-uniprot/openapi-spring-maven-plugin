@@ -36,10 +36,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.lang.reflect.Method;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Originally written by https://github.com/springdoc as a part of class AbstractOpenApiResource
@@ -52,7 +49,7 @@ import java.util.Set;
 public class OpenAPIMojo extends AbstractMojo {
 
     @Parameter(required = true)
-    private String packageToScan; // package to scan where controllers and related classes are
+    private List<String> packageLocations; // list packageLocations to scan where controllers and related classes are
 
     @Parameter(defaultValue = "localhost")
     private String serverBaseUrl;
@@ -94,29 +91,28 @@ public class OpenAPIMojo extends AbstractMojo {
 
         // default values for info tags and default server.. TODO make it configurable
         generalInfoBuilder.build(openAPIBuilder.getOpenAPI());
-
-        Reflections reflections = new Reflections(this.packageToScan);
-
-        //Reflections reflections = new Reflections(this.packageToScan);
-        // read all the classes which can have REST APIs
-        Set<Class<?>> restControllers = reflections.getTypesAnnotatedWith(RestController.class);
-        Set<Class<?>> controllers = reflections.getTypesAnnotatedWith(Controller.class);
-        Set<Class<?>> requestMappingClasses = reflections.getTypesAnnotatedWith(RequestMapping.class);
         Set<Class<?>> allRequiredClasses = new HashSet<>();
-        allRequiredClasses.addAll(restControllers);
-        allRequiredClasses.addAll(requestMappingClasses);
-        allRequiredClasses.addAll(controllers);
+        Set<Class<?>> allControllerAdvices = new HashSet<>();
 
-        // calculate generic responses TODO write a test case for controller advice
-        Set<Class<?>> controllerAdvices = reflections.getTypesAnnotatedWith(ControllerAdvice.class);
-        responseBuilder.buildGenericResponse(openAPIBuilder.getComponents(), controllerAdvices);
+        for(String location : this.packageLocations) {
+            Reflections reflections = new Reflections(location);
+            // read all the classes which can have REST APIs
+            Set<Class<?>> restControllers = reflections.getTypesAnnotatedWith(RestController.class);
+            Set<Class<?>> controllers = reflections.getTypesAnnotatedWith(Controller.class);
+            Set<Class<?>> requestMappingClasses = reflections.getTypesAnnotatedWith(RequestMapping.class);
 
+            allRequiredClasses.addAll(restControllers);
+            allRequiredClasses.addAll(requestMappingClasses);
+            allRequiredClasses.addAll(controllers);
+            // calculate generic responses TODO write a test case for controller advice
+            Set<Class<?>> controllerAdvices = reflections.getTypesAnnotatedWith(ControllerAdvice.class);
+            allControllerAdvices.addAll(controllerAdvices);
+        }
+
+        responseBuilder.buildGenericResponse(openAPIBuilder.getComponents(), allControllerAdvices);
         // get the method --> SpringMethod map
         Map<String, SpringControllerMethod> resourceMap = generateResourceMap(allRequiredClasses);
-
-
         populateControllerPaths(resourceMap);
-
         LOGGER.info("Time taken to generate openapi doc is: {} ms", Duration.between(start, Instant.now()).toMillis());
 
         return openAPIBuilder.getOpenAPI();
@@ -211,8 +207,8 @@ public class OpenAPIMojo extends AbstractMojo {
     }
 
     // Do not delete this method. For testing
-    public void setPackageToScan(String packageToScan) {
-        this.packageToScan = packageToScan;
+    public void setPackageToScan(List<String> packageLocations) {
+        this.packageLocations = packageLocations;
     }
 
     // Do not delete this method. For testing

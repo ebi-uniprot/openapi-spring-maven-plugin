@@ -6,7 +6,8 @@ public class RequestBodyAnnotationTest extends BaseAnnotationTest {
     @Test
     public void testGeneralRequestBody() throws Exception {
         // generate OAS for the given package
-        generateOAS3("ebi.ac.uk.uniprot.openapi.mavenplugin.swagger.requestbody.general", "request-body-general.yaml");
+        generateOAS3( "request-body-general.yaml",
+                "ebi.ac.uk.uniprot.openapi.mavenplugin.swagger.requestbody.general");
 
         // compare the result
         compareYamlFiles("request-body-general.yaml");
@@ -15,7 +16,8 @@ public class RequestBodyAnnotationTest extends BaseAnnotationTest {
     @Test
     public void testRequestBodyAroundMethod() throws Exception {
         // generate OAS for the given package
-        generateOAS3("ebi.ac.uk.uniprot.openapi.mavenplugin.swagger.requestbody.onlymethod", "request-body-method.yaml");
+        generateOAS3( "request-body-method.yaml",
+                "ebi.ac.uk.uniprot.openapi.mavenplugin.swagger.requestbody.onlymethod");
 
         // compare the result
         compareYamlFiles("request-body-method.yaml");
@@ -24,7 +26,8 @@ public class RequestBodyAnnotationTest extends BaseAnnotationTest {
     @Test
     public void testRequestBodyAroundMethodAndParam() throws Exception {
         // generate OAS for the given package
-        generateOAS3("ebi.ac.uk.uniprot.openapi.mavenplugin.swagger.requestbody.methodandparam", "request-body-method-param.yaml");
+        generateOAS3( "request-body-method-param.yaml",
+                "ebi.ac.uk.uniprot.openapi.mavenplugin.swagger.requestbody.methodandparam");
 
         // compare the result
         compareYamlFiles("request-body-method-param.yaml");

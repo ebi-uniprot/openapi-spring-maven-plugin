@@ -23,9 +23,11 @@
             <plugin>
                 <groupId>uk.ac.ebi.uniprot</groupId>
                 <artifactId>openapi-maven-plugin</artifactId>
-                <version>0.1</version>
+                <version>master</version>
                 <configuration>
-                    <packageToScan>ebi.ac.uk.uniprot.openapi.mavenplugin.utils</packageToScan> <!-- non existing package -->
+                    <packageLocations>
+                        <packageLocation>ebi.ac.uk.uniprot.openapi.mavenplugin.utils</packageLocation><!-- non existing package -->
+                    </packageLocations>
                 </configuration>
             </plugin>
         </plugins>
