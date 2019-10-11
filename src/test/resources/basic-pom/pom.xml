@@ -26,7 +26,7 @@
                 <version>master</version>
                 <configuration>
                     <packageLocations>
-                        <packageLocation>ebi.ac.uk.uniprot.openapi.mavenplugin.utils</packageLocation><!-- non existing package -->
+                        <packageLocation>uk.ac.ebi.uniprot.openapi.mavenplugin.utils</packageLocation><!-- non existing package -->
                     </packageLocations>
                 </configuration>
             </plugin>

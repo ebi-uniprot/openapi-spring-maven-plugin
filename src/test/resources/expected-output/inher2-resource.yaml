@@ -67,7 +67,7 @@ paths:
           description: Pet not found
     put:
       description: combinatedsameOperationName
-      operationId: getPerson_1
+      operationId: getPerson
       responses:
         200:
           description: default response
@@ -91,7 +91,7 @@ paths:
                 type: string
     head:
       description: combinatedsameOperationNameDuplicated
-      operationId: getPerson
+      operationId: getPerson_1
       requestBody:
         content:
           '*/*':

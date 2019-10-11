@@ -28,7 +28,7 @@
                     <openApiDirectory>target/generated-sources/swagger/</openApiDirectory>
                     <openApiFileName>pet-resource.yaml</openApiFileName>
                     <packageLocations>
-                        <packageLocation>ebi.ac.uk.uniprot.openapi.mavenplugin.swagger.petstore</packageLocation>
+                        <packageLocation>uk.ac.ebi.uniprot.openapi.mavenplugin.swagger.petstore</packageLocation>
                     </packageLocations>
                     <serverBaseUrl>localhost</serverBaseUrl>
                 </configuration>

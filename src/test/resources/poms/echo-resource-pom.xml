@@ -28,7 +28,7 @@
                     <openApiDirectory>target/generated-sources/swagger/</openApiDirectory>
                     <openApiFileName>echo-resource.yaml</openApiFileName>
                     <packageLocations>
-                        <packageLocation>ebi.ac.uk.uniprot.openapi.mavenplugin.echo</packageLocation>
+                        <packageLocation>uk.ac.ebi.uniprot.openapi.mavenplugin.echo</packageLocation>
                     </packageLocations>
                     <serverBaseUrl>localhost</serverBaseUrl>
                 </configuration>
