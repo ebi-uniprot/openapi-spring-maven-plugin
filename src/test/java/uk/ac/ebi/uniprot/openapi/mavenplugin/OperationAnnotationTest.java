@@ -1,5 +1,6 @@
 package uk.ac.ebi.uniprot.openapi.mavenplugin;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class OperationAnnotationTest extends BaseAnnotationTest{
@@ -74,6 +75,7 @@ public class OperationAnnotationTest extends BaseAnnotationTest{
     }
 
     @Test
+    @Ignore
     public void testControllerInheritance2() throws Exception {
         // generate OAS for the given package
         generateOAS3( "inher2-resource.yaml",
