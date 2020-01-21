@@ -41,7 +41,7 @@
         <io.swagger.core.v3.version>2.0.8</io.swagger.core.v3.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.version>3.3.9</maven.version>
-        <spring.version>5.0.13.RELEASE</spring.version>
+        <spring.version>5.2.3.RELEASE</spring.version>
     </properties>
 
     <dependencies>
