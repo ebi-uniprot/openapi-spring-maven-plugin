@@ -1,9 +1,5 @@
 package uk.ac.ebi.uniprot.openapi.core.request;
 
-import uk.ac.ebi.uniprot.openapi.FileHelper;
-import uk.ac.ebi.uniprot.openapi.core.MediaAttributes;
-import uk.ac.ebi.uniprot.openapi.extension.ModelFieldMeta;
-import uk.ac.ebi.uniprot.openapi.utils.Constants;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.media.Schema;
@@ -25,6 +21,9 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
+import uk.ac.ebi.uniprot.openapi.core.MediaAttributes;
+import uk.ac.ebi.uniprot.openapi.extension.ModelFieldMeta;
+import uk.ac.ebi.uniprot.openapi.utils.Constants;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -186,11 +185,25 @@ public class RequestBuilder {
 
     private Map<String, Object> getExtensionFromModelFieldMeta(ModelFieldMeta modelFieldMeta) {
         Map<String, Object> extensions = new LinkedHashMap<>();
-        List<Map<String, Object>> paramMetaList = FileHelper.readMetaList(modelFieldMeta.path());
+        List<Map<String, Object>> paramMetaList = getParamMetaList(modelFieldMeta);
         if (!CollectionUtils.isEmpty(paramMetaList)) {
             extensions.put("x-param-extra", paramMetaList);
         }
 
         return extensions;
+    }
+
+    private List<Map<String, Object>> getParamMetaList(ModelFieldMeta modelFieldMeta){
+        List<Map<String, Object>> modelFieldMetaList = new ArrayList<>();
+        if(modelFieldMeta != null){
+            try {
+                Method m = modelFieldMeta.reader().getDeclaredMethod("read", String.class);
+                Object t = modelFieldMeta.reader().newInstance();
+                modelFieldMetaList = (List<Map<String, Object>>) m.invoke(t, modelFieldMeta.path());
+            } catch (Exception e){
+                LOGGER.error("Unable to call read method", e);
+            }
+        }
+        return modelFieldMetaList;
     }
 }

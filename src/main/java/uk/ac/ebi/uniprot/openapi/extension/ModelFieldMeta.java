@@ -11,5 +11,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(value = {ElementType.FIELD, ElementType.PARAMETER})
 public @interface ModelFieldMeta {
-    String path() default ""; // path to the json config file
+    Class<? extends ModelFieldMetaReader> reader();
+    String path(); // path to the json config file
 }

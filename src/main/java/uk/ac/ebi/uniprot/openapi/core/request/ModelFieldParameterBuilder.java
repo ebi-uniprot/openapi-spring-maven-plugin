@@ -1,8 +1,5 @@
 package uk.ac.ebi.uniprot.openapi.core.request;
 
-import uk.ac.ebi.uniprot.openapi.FileHelper;
-import uk.ac.ebi.uniprot.openapi.core.SpringDocAnnotationsUtils;
-import uk.ac.ebi.uniprot.openapi.extension.ModelFieldMeta;
 import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.parameters.Parameter;
 import org.apache.commons.lang3.StringUtils;
@@ -12,9 +9,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import uk.ac.ebi.uniprot.openapi.core.SpringDocAnnotationsUtils;
+import uk.ac.ebi.uniprot.openapi.extension.ModelFieldMeta;
 import uk.ac.ebi.uniprot.openapi.utils.Constants;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -126,7 +126,13 @@ public class ModelFieldParameterBuilder {
         List<Map<String, Object>> modelFieldMetaList = new ArrayList<>();
         ModelFieldMeta modelFieldMeta = field.getAnnotation(ModelFieldMeta.class);
         if(modelFieldMeta != null){
-            modelFieldMetaList = FileHelper.readMetaList(modelFieldMeta.path());
+            try {
+                Method m = modelFieldMeta.reader().getDeclaredMethod("read", String.class);
+                Object t = modelFieldMeta.reader().newInstance();
+                modelFieldMetaList = (List<Map<String, Object>>) m.invoke(t, modelFieldMeta.path());
+            } catch (Exception e){
+                LOGGER.error("Unable to call read method", e);
+            }
         }
         return modelFieldMetaList;
     }
