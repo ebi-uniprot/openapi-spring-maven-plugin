@@ -1,3 +1,5 @@
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/uk.ac.ebi.uniprot/openapi-maven-plugin/badge.svg?style=plastic)](https://maven-badges.herokuapp.com/maven-central/uk.ac.ebi.uniprot/openapi-maven-plugin)
+
 # Swagger Maven Plugin for Spring MVC
 
 This maven plugin generates Open Specification 3.0.1 (OAS3) for your Spring Rest Project. It supports most of the Swagger 2+ and Spring Web annotation. It is simple to use and generates the OAS3 specifaction in yaml format. Please note that it is the first release so there are few bugs, we will fix them.    
