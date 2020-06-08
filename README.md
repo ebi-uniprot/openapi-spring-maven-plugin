@@ -31,8 +31,8 @@ Import the plugin in your project by adding following configuration in your `plu
             <version>0.3</version>
             <configuration>
                 <packageLocations>
-					<packageLocation>your.package.with.spring.controllers</packageLocation>
-                    <packageLocation>your.package.with.spring.controllers</packageLocation>
+			<packageLocation>your.package.with.spring.controllers</packageLocation>
+	        	<packageLocation>your.package.with.spring.controllers</packageLocation>
                 </packageLocations>
                 <openApiDirectory>generated/swagger</openApiDirectory>
                 <openApiFileName>openapi.yaml</openApiFileName>
@@ -55,7 +55,7 @@ Import the plugin in your project by adding following configuration in your `plu
 
 | **name** | **description** |
 |------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `packageToScan` | Mandatory param to pass the package name where Spring Controllers are.  |
+| `packageLocations` | Mandatory param to pass the `packageLocation` name(s) where Spring Controllers are.  |
 | `openApiDirectory` | Path of the directory where you want to generate the Open API Specification yaml file. Defaults to `target/generated-sources/swagger/` |
 | `openApiFileName` | Name of the Open API Specification yaml file. Defaults to `openapi3.yaml` |
 | `serverBaseUrl` | Server URL. Default to `localhost` |
