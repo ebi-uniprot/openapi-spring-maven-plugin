@@ -28,9 +28,12 @@ Import the plugin in your project by adding following configuration in your `plu
         <plugin>
             <groupId>uk.ac.ebi.uniprot</groupId>
             <artifactId>openapi-maven-plugin</artifactId>
-            <version>0.1</version>
+            <version>0.3</version>
             <configuration>
-                <packageToScan>your.package.with.spring.controllers</packageToScan>
+                <packageLocations>
+					<packageLocation>your.package.with.spring.controllers</packageLocation>
+                    <packageLocation>your.package.with.spring.controllers</packageLocation>
+                </packageLocations>
                 <openApiDirectory>generated/swagger</openApiDirectory>
                 <openApiFileName>openapi.yaml</openApiFileName>
                 <serverBaseUrl>http://localhost/</serverBaseUrl>
