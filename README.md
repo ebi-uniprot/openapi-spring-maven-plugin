@@ -15,7 +15,7 @@ This maven plugin generates Open Specification 3.0.1 (OAS3) for your Spring Rest
 * Quickly generates  openapi3.yaml by command `mvn compile`
 
 # Versions
-- [0.1] supports Swagger Spec [2.0] SpingMVC.
+- [0.3] supports Swagger Spec [2.0] SpingMVC.
 
 
 # Usage/Example
