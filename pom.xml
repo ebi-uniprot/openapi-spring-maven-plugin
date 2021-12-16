@@ -43,7 +43,17 @@
         <maven.version>3.3.9</maven.version>
         <spring.version>[5.0.16,)</spring.version>
     </properties>
-
+    <dependencyManagement>
+        <!-- force all dependencies to log4j, including transitive ones, to use
+            this version after vulnerability found: https://access.redhat.com/security/cve/cve-2021-44228 -->
+        <dependencies>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-core</artifactId>
+                <version>2.16.0</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     <dependencies>
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -81,7 +91,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.11</version>
+            <version>[4.13.1,)</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -90,8 +100,6 @@
             <scope>test</scope>
             <version>3.3.0</version>
         </dependency>
-
-
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-project</artifactId>
@@ -167,7 +175,7 @@
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.6</version>
+            <version>[2.7,)</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -199,7 +207,6 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
     <build>
         <plugins>
             <plugin>
