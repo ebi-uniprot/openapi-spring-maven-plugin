@@ -41,7 +41,7 @@
         <io.swagger.core.v3.version>2.0.8</io.swagger.core.v3.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.version>3.3.9</maven.version>
-        <spring.version>5.3.17</spring.version>
+        <spring.version>5.3.18</spring.version>
     </properties>
     <dependencyManagement>
         <!-- force all dependencies to log4j, including transitive ones, to use
